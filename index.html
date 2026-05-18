@@ -3,828 +3,809 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SPT Calculatoare — IG:SPT.CATALIN</title>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<title>SPT TOOLS — SpartanRP</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:     #03070a;
-  --card:   #0b1520;
-  --border: rgba(255,255,255,0.07);
-  --p:      #00ffa3;
-  --s:      #00d1ff;
-  --pur:    #dd88ff;
-  --gold:   #ffd700;
-  --danger: #ff2a2a;
-  --text:   #e0e8f0;
-  --sub:    #55667a;
+  --bg0:   #040c0c;
+  --bg1:   #071212;
+  --panel: #080f10;
+  --line:  rgba(0,230,180,0.1);
+  --acc:   #00e6b4;
+  --acc2:  #00c9ff;
+  --acc3:  #00ff88;
+  --dim:   #1a3530;
+  --muted: #2e5550;
+  --text:  #b0ddd8;
+  --white: #e0f5f2;
+  --danger:#e84040;
+  --gold:  #00e6b4;
 }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Rajdhani', sans-serif;
-  min-height: 100vh;
-  overflow-x: hidden;
-  font-size: 1rem;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg0);
+  color:var(--text);
+  font-family:'Barlow Condensed',sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
 }
 
-/* ===== BACKGROUND ===== */
-.bg-grid {
-  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+/* noise */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+}
+/* scanlines */
+body::after{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.05) 2px,rgba(0,0,0,0.05) 4px);
+}
+
+.bg-pattern{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
   background-image:
-    linear-gradient(rgba(0,255,163,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,255,163,0.03) 1px, transparent 1px);
-  background-size: 50px 50px;
+    linear-gradient(135deg,rgba(0,230,180,0.025) 1px,transparent 1px),
+    linear-gradient(45deg,rgba(0,201,255,0.015) 1px,transparent 1px);
+  background-size:60px 60px,30px 30px;
 }
-.bg-glow {
-  position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background: radial-gradient(ellipse 80% 50% at 20% 10%, rgba(0,255,163,0.07) 0%, transparent 60%),
-              radial-gradient(ellipse 60% 40% at 80% 80%, rgba(0,209,255,0.06) 0%, transparent 60%);
-}
-
-/* ===== HEADER ===== */
-header {
-  position: sticky; top: 0; z-index: 100;
-  padding: 14px 30px;
-  background: rgba(3,7,10,0.9);
-  border-bottom: 1px solid rgba(0,255,163,0.15);
-  backdrop-filter: blur(20px);
-  display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: 12px;
-}
-.logo {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 20px; font-weight: 900;
-  background: linear-gradient(90deg, var(--p), var(--s));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  letter-spacing: 2px;
-}
-.header-badge {
-  font-size: 12px; font-weight: 700; letter-spacing: 2px;
-  color: var(--sub); border: 1px solid var(--border);
-  padding: 5px 14px; border-radius: 20px;
+.bg-glow{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 50% at 10% 0%,rgba(0,230,180,0.06) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 40% at 90% 90%,rgba(0,201,255,0.05) 0%,transparent 60%);
 }
 
-/* ===== NAV TABS ===== */
-.nav-strip {
-  position: relative; z-index: 1;
-  display: flex; gap: 10px; padding: 28px 24px 0 24px;
-  overflow-x: auto; scrollbar-width: none;
-}
-.nav-strip::-webkit-scrollbar { display: none; }
-.nav-btn {
-  flex-shrink: 0;
-  padding: 12px 26px;
-  border-radius: 14px 14px 0 0;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid var(--border);
-  border-bottom: none;
-  color: var(--sub);
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 15px; font-weight: 800;
-  letter-spacing: 1.5px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.nav-btn:hover { color: var(--text); background: rgba(255,255,255,0.06); }
-.nav-btn.active {
-  color: #fff;
-  background: var(--card);
-  border-color: rgba(0,255,163,0.2);
-  position: relative;
-}
-.nav-btn.active::after {
-  content: '';
-  position: absolute; bottom: -1px; left: 0; right: 0;
-  height: 1px; background: var(--card);
-}
-.nav-btn .nb-icon { margin-right: 8px; font-size: 16px; }
+/* ─ LAYOUT ─ */
+.wrap{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:0 24px 80px;}
 
-/* ===== MAIN ===== */
-main {
-  position: relative; z-index: 1;
-  padding: 0 24px 60px 24px;
-  max-width: 900px; margin: 0 auto;
+/* ─ HEADER ─ */
+.hdr{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  padding:32px 0 20px;border-bottom:1px solid var(--line);
+  margin-bottom:0;flex-wrap:wrap;gap:16px;
 }
+.hdr-tag{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--acc2);letter-spacing:4px;text-transform:uppercase;margin-bottom:6px;}
+.hdr-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(42px,8vw,72px);line-height:.88;color:var(--white);letter-spacing:2px;
+}
+.hdr-title span{
+  background:linear-gradient(90deg,var(--acc),var(--acc2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hdr-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;}
+.hdr-version{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim);letter-spacing:2px;}
+.hdr-status{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:2px;color:var(--acc);}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--acc);box-shadow:0 0 10px var(--acc);animation:pulse-dot 2s ease-in-out infinite;}
+@keyframes pulse-dot{0%,100%{opacity:1;box-shadow:0 0 12px var(--acc);}50%{opacity:.3;box-shadow:0 0 3px var(--acc);}}
 
-.section {
-  display: none;
-  background: var(--card);
-  border: 1px solid rgba(0,255,163,0.15);
-  border-radius: 0 18px 18px 18px;
-  padding: 32px;
-  animation: fadeIn 0.25s ease;
+/* ─ NAV ─ */
+.main-nav{
+  display:flex;gap:0;margin-top:0;
+  border-bottom:1px solid var(--line);
 }
-.section.active { display: block; }
-@keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+.nav-btn{
+  padding:14px 32px;
+  background:none;border:none;
+  border-bottom:3px solid transparent;
+  color:var(--muted);
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:15px;font-weight:800;letter-spacing:2px;
+  cursor:pointer;transition:all .15s;text-transform:uppercase;
+  white-space:nowrap;
+}
+.nav-btn:hover{color:var(--text);background:rgba(0,230,180,0.03);}
+.nav-btn.active{
+  color:var(--acc);
+  border-bottom-color:var(--acc);
+  background:rgba(0,230,180,0.04);
+}
+.nav-btn .nb-ic{margin-right:8px;font-size:16px;}
 
-/* ===== RECIPE BOX ===== */
-.recipe-box {
-  background: rgba(0,255,163,0.04);
-  border: 1px solid rgba(0,255,163,0.15);
-  border-radius: 14px;
-  padding: 18px 22px;
-  margin-bottom: 28px;
-  font-size: 14px; line-height: 2;
-}
-.recipe-box b { color: var(--p); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 4px; }
-.recipe-box .r-arrow { color: var(--p); margin: 0 6px; }
-.recipe-box .r-result { color: var(--s); font-weight: 700; }
-.recipe-box .r-dim { color: var(--sub); }
-.recipe-box .r-price { color: var(--gold); font-weight: 800; }
+/* ─ SECTIONS ─ */
+.section{display:none;padding-top:28px;}
+.section.active{display:block;animation:fadeIn .2s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:none;}}
 
-/* ===== SUB TABS ===== */
-.sub-tabs { display: flex; gap: 8px; margin-bottom: 24px; }
-.sub-tab {
-  flex: 1; padding: 12px 16px;
-  border-radius: 12px;
-  border: 2px solid rgba(255,255,255,0.1);
-  background: rgba(255,255,255,0.03);
-  color: var(--sub);
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 14px; font-weight: 800; letter-spacing: 1px;
-  cursor: pointer; transition: all 0.2s;
+/* ─ PANEL ─ */
+.panel{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:2px;position:relative;overflow:hidden;
 }
-.sub-tab:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
-.sub-tab.active {
-  background: rgba(0,255,163,0.12);
-  border-color: var(--p); color: var(--p);
+.panel::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--acc),var(--acc2),transparent);
+  opacity:.35;
 }
+.panel-hdr{padding:14px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
+.panel-label{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;}
+.panel-num{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim);}
 
-/* ===== PRESETS ===== */
-.preset-label { font-size: 11px; letter-spacing: 3px; color: var(--sub); margin-bottom: 10px; display: block; }
-.presets { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-.preset-btn {
-  background: rgba(0,209,255,0.08);
-  border: 2px solid rgba(0,209,255,0.3);
-  color: var(--s);
-  padding: 10px 20px;
-  border-radius: 10px;
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 17px; font-weight: 900; letter-spacing: 1px;
-  cursor: pointer; transition: all 0.15s;
-}
-.preset-btn:hover { background: rgba(0,209,255,0.18); border-color: var(--s); }
-.preset-btn.selected { background: var(--s); color: #000; }
+/* ─ WEAPON GRID ─ */
+.main-grid{display:grid;grid-template-columns:340px 1fr;gap:20px;align-items:start;}
+@media(max-width:840px){.main-grid{grid-template-columns:1fr;}}
 
-/* ===== INPUT ROW ===== */
-.input-row {
-  display: flex; gap: 10px; margin-bottom: 28px;
+/* category strip */
+.cat-strip{display:flex;border-bottom:1px solid var(--line);}
+.cat-btn{
+  flex:1;padding:10px 6px;background:none;border:none;border-right:1px solid var(--line);
+  color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;
+  cursor:pointer;transition:all .12s;text-transform:uppercase;
 }
-.input-row input {
-  flex: 1; padding: 12px 18px;
-  background: rgba(0,0,0,0.4);
-  border: 2px solid var(--border);
-  border-radius: 12px;
-  color: var(--text);
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 17px; font-weight: 700;
-  transition: border-color 0.2s;
-}
-.input-row input:focus { outline: none; border-color: rgba(0,255,163,0.4); }
-.input-row input::placeholder { color: var(--sub); }
-.btn-calc {
-  padding: 0 24px;
-  background: var(--p); color: #000;
-  border: none; border-radius: 12px;
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 15px; font-weight: 900;
-  cursor: pointer; letter-spacing: 1px;
-  transition: opacity 0.15s;
-  white-space: nowrap;
-}
-.btn-calc:hover { opacity: 0.85; }
-.btn-reset {
-  padding: 0 18px;
-  background: rgba(255,42,42,0.08);
-  color: var(--danger);
-  border: 2px solid rgba(255,42,42,0.3);
-  border-radius: 12px;
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 14px; font-weight: 900;
-  cursor: pointer; letter-spacing: 1px;
-  transition: all 0.15s;
-  white-space: nowrap; height: 100%;
-}
-.btn-reset:hover { background: rgba(255,42,42,0.18); border-color: var(--danger); }
+.cat-btn:last-child{border-right:none;}
+.cat-btn:hover{background:rgba(0,230,180,0.04);color:var(--text);}
+.cat-btn.active{background:rgba(0,230,180,0.08);color:var(--acc);border-bottom:2px solid var(--acc);}
 
-/* ===== RESULT CARD ===== */
-.result-wrap { display: none; }
-.result-wrap.show { display: block; animation: fadeIn 0.25s ease; }
+/* weapon list */
+.weapon-list{padding:4px 0;max-height:560px;overflow-y:auto;}
+.weapon-row{
+  display:flex;align-items:center;border-bottom:1px solid rgba(255,255,255,.025);
+  cursor:pointer;transition:background .1s;position:relative;
+}
+.weapon-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--acc);transform:scaleY(0);transition:transform .12s;}
+.weapon-row:hover{background:rgba(0,230,180,.035);}
+.weapon-row.active{background:rgba(0,230,180,.065);}
+.weapon-row.active::before{transform:scaleY(1);}
+.weapon-row.hidden{display:none;}
+.wr-code{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dim);padding:13px 12px;min-width:46px;text-align:center;border-right:1px solid var(--line);}
+.weapon-row.active .wr-code{color:var(--acc2);}
+.wr-info{padding:13px 16px;flex:1;}
+.wr-name{font-size:15px;font-weight:800;letter-spacing:.5px;color:var(--text);text-transform:uppercase;line-height:1;}
+.weapon-row.active .wr-name{color:var(--acc);}
+.wr-cat{font-size:11px;font-weight:600;letter-spacing:2px;color:var(--muted);margin-top:3px;}
+.wr-arrow{padding:13px 14px;color:var(--dim);font-size:16px;transition:color .12s;}
+.weapon-row:hover .wr-arrow,.weapon-row.active .wr-arrow{color:var(--acc);}
 
-.result-hero {
-  background: rgba(0,0,0,0.35);
-  border: 1px solid rgba(0,209,255,0.15);
-  border-radius: 18px;
-  padding: 24px;
-  margin-bottom: 14px;
-}
-.result-title {
-  text-align: center; margin-bottom: 22px;
-}
-.result-title .big-num {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 52px; font-weight: 900;
-  background: linear-gradient(90deg, var(--p), var(--s));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  line-height: 1;
-}
-.result-title small {
-  display: block; font-size: 10px;
-  letter-spacing: 4px; color: var(--sub);
-  margin-top: 6px;
-}
+/* right col */
+.right-col{display:flex;flex-direction:column;gap:16px;}
+.detail-panel{display:none;flex-direction:column;gap:16px;}
+.detail-panel.show{display:flex;}
 
-.ing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.ing-box {
-  background: rgba(0,0,0,0.4);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 14px 16px;
-  display: flex; align-items: center; gap: 12px;
-}
-.ing-box .iq {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 22px; font-weight: 700;
-  color: var(--p); min-width: 64px;
-}
-.ing-box .in { font-size: 13px; font-weight: 700; color: #bbb; line-height: 1.3; text-transform: uppercase; letter-spacing: 0.5px; }
-.ing-box.cyan .iq { color: var(--s); }
-.ing-box.gold { border-color: rgba(255,215,0,0.2); background: rgba(255,215,0,0.04); }
-.ing-box.gold .iq { color: var(--gold); }
-.ing-box.red { border-color: rgba(255,42,42,0.2); background: rgba(255,42,42,0.05); }
-.ing-box.red .iq { color: var(--danger); }
+/* empty */
+.empty-state{padding:80px 40px;text-align:center;}
+.empty-icon{font-size:44px;margin-bottom:18px;filter:grayscale(1) opacity(.2);}
+.empty-text{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--dim);text-transform:uppercase;line-height:2.2;}
 
-.profit-box {
-  background: rgba(255,215,0,0.06);
-  border: 1px solid rgba(255,215,0,0.22);
-  border-radius: 16px;
-  padding: 22px;
-  text-align: center;
-}
-.profit-box small { font-size: 10px; letter-spacing: 4px; color: var(--sub); }
-.profit-box .profit-num {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 42px; font-weight: 900;
-  color: var(--gold); margin-top: 6px; line-height: 1;
+/* hero */
+.weapon-hero{padding:22px 24px;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.wh-name{font-family:'Bebas Neue',sans-serif;font-size:48px;line-height:1;color:var(--white);letter-spacing:1px;}
+.wh-cat{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--acc2);margin-top:5px;}
+.wh-tag{display:inline-block;background:rgba(0,230,180,.08);border:1px solid rgba(0,230,180,.28);color:var(--acc);font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;padding:5px 14px;border-radius:1px;}
+
+/* controls */
+.controls-pad{padding:20px 24px;}
+.ctrl-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+.ctrl-label{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--muted);white-space:nowrap;}
+.qty-control{display:flex;border:1px solid var(--line);}
+.qty-btn{width:38px;height:38px;background:rgba(255,255,255,.025);border:none;color:var(--acc);font-size:22px;font-weight:900;cursor:pointer;transition:background .1s;display:flex;align-items:center;justify-content:center;}
+.qty-btn:hover{background:rgba(0,230,180,.1);}
+.qty-input{width:74px;height:38px;background:rgba(0,0,0,.3);border:none;border-left:1px solid var(--line);border-right:1px solid var(--line);color:var(--white);font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;text-align:center;}
+.qty-input:focus{outline:none;background:rgba(0,230,180,.04);}
+
+.btn-reset{margin-left:auto;padding:9px 18px;background:rgba(232,64,64,.06);border:1px solid rgba(232,64,64,.22);color:var(--danger);font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;cursor:pointer;transition:all .12s;}
+.btn-reset:hover{background:rgba(232,64,64,.15);border-color:var(--danger);}
+
+/* attachments */
+.attach-wrap{padding:0 24px 20px;display:none;}
+.section-ttl{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.section-ttl::after{content:'';flex:1;height:1px;background:var(--line);}
+.attach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px;}
+.attach-item{padding:10px 14px;background:rgba(0,0,0,.28);border:1px solid var(--line);cursor:pointer;transition:all .1s;display:flex;align-items:center;gap:10px;border-radius:1px;}
+.attach-item:hover{border-color:rgba(0,230,180,.22);background:rgba(0,230,180,.035);}
+.attach-item.active{border-color:var(--acc);background:rgba(0,230,180,.07);}
+.a-check{width:16px;height:16px;flex-shrink:0;border:1px solid var(--dim);border-radius:1px;display:flex;align-items:center;justify-content:center;font-size:10px;color:transparent;transition:all .1s;}
+.attach-item.active .a-check{background:var(--acc);border-color:var(--acc);color:#000;}
+.a-name{font-size:13px;font-weight:700;letter-spacing:.3px;color:var(--muted);text-transform:uppercase;line-height:1.2;}
+.attach-item.active .a-name{color:var(--text);}
+
+/* materials */
+.mats-wrap{padding:22px 24px;display:none;}
+.mats-wrap.show{display:block;}
+.mats-head{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
+.mats-lbl{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--muted);}
+.mats-div{flex:1;height:1px;background:var(--line);}
+.mats-info{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--acc2);letter-spacing:1px;white-space:nowrap;}
+.mats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:10px;}
+.mat-card{background:rgba(0,0,0,.38);border:1px solid rgba(255,255,255,.04);padding:14px 16px;display:flex;align-items:center;gap:14px;border-radius:1px;animation:mat-in .18s ease both;}
+@keyframes mat-in{from{opacity:0;transform:translateX(-6px);}to{opacity:1;transform:none;}}
+.mat-card:nth-child(1){animation-delay:.00s;border-left:3px solid var(--acc);}
+.mat-card:nth-child(2){animation-delay:.04s;border-left:3px solid var(--acc2);}
+.mat-card:nth-child(3){animation-delay:.08s;border-left:3px solid #00ff88;}
+.mat-card:nth-child(4){animation-delay:.12s;border-left:3px solid #40e8d0;}
+.mat-card:nth-child(5){animation-delay:.16s;border-left:3px solid #00a8ff;}
+.mat-card:nth-child(6){animation-delay:.20s;border-left:3px solid #00e690;}
+.mat-qty{font-family:'Bebas Neue',sans-serif;font-size:40px;line-height:1;color:var(--white);min-width:54px;text-align:center;}
+.mat-name{font-size:14px;font-weight:800;letter-spacing:.5px;color:var(--text);text-transform:uppercase;line-height:1;}
+.mat-unit{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;margin-top:3px;}
+
+/* ═══════════════════════════════════════
+   SPALARE BANI
+═══════════════════════════════════════ */
+.launder-wrap{
+  max-width:680px;margin:0 auto;
+  display:flex;flex-direction:column;gap:20px;
 }
 
-/* ===== BULGARI TAB ===== */
-.b2m-inputs {
-  background: rgba(0,0,0,0.25);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 22px;
-  margin-bottom: 20px;
+/* warning banner */
+.warn-banner{
+  display:flex;align-items:center;gap:16px;
+  background:rgba(0,230,180,.04);
+  border:1px solid rgba(0,230,180,.15);
+  border-left:4px solid var(--acc);
+  padding:16px 20px;
+  border-radius:2px;
 }
-.b2m-inputs small {
-  font-size: 11px; letter-spacing: 2px; color: var(--sub);
-  display: block; margin-bottom: 16px;
-}
-.b2m-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.b2m-grid label {
-  font-size: 12px; letter-spacing: 1px; color: var(--sub);
-  display: block; margin-bottom: 6px; font-weight: 700;
-}
-.b2m-grid input {
-  width: 100%; padding: 12px 16px;
-  background: rgba(0,0,0,0.5);
-  border: 2px solid var(--border);
-  border-radius: 10px;
-  color: var(--text);
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 17px; font-weight: 700;
-}
-.b2m-grid input:focus { outline: none; border-color: rgba(0,255,163,0.4); }
+.warn-icon{font-size:28px;flex-shrink:0;}
+.warn-text{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:1.5px;color:var(--muted);line-height:1.8;text-transform:uppercase;}
+.warn-text b{color:var(--acc);}
 
-.b2m-result-grid {
-  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;
-  margin-bottom: 12px;
+/* input card */
+.launder-card{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:2px;padding:28px;position:relative;overflow:hidden;
 }
-.b2m-box {
-  background: rgba(0,0,0,0.4);
-  border: 1px solid var(--border);
-  border-radius: 14px; padding: 16px;
-  text-align: center;
-}
-.b2m-box .bv {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 28px; font-weight: 700;
-}
-.b2m-box small { font-size: 10px; letter-spacing: 2px; color: var(--sub); text-transform: uppercase; display: block; margin-top: 4px; }
-.b2m-box.green { border-color: rgba(0,255,163,0.2); }
-.b2m-box.green .bv { color: var(--p); }
-.b2m-box.blue { border-color: rgba(0,209,255,0.2); }
-.b2m-box.blue .bv { color: var(--s); }
-.b2m-box.gold { border-color: rgba(255,215,0,0.2); }
-.b2m-box.gold .bv { color: var(--gold); }
+.launder-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--acc),var(--acc2),transparent);opacity:.35;}
+.lc-title{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.lc-title::after{content:'';flex:1;height:1px;background:var(--line);}
 
-.b2m-profit {
-  background: rgba(255,215,0,0.06);
-  border: 1px solid rgba(255,215,0,0.2);
-  border-radius: 14px; padding: 18px 24px;
-  display: flex; justify-content: space-between; align-items: center;
+/* amount input */
+.amount-field{
+  display:flex;align-items:center;
+  background:rgba(0,0,0,.4);
+  border:1px solid var(--line);
+  border-radius:2px;
+  margin-bottom:6px;
+  transition:border-color .15s;
+  overflow:hidden;
 }
-.b2m-profit .label { font-size: 10px; letter-spacing: 3px; color: var(--sub); margin-bottom: 4px; }
-.b2m-profit .val {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 32px; font-weight: 700; color: var(--gold);
+.amount-field:focus-within{border-color:rgba(0,230,180,.4);}
+.amount-prefix{
+  padding:0 18px;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:28px;color:var(--acc);
+  background:rgba(0,230,180,.06);
+  border-right:1px solid var(--line);
+  height:60px;display:flex;align-items:center;
 }
-.b2m-profit .batch-val {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 32px; font-weight: 700; color: var(--sub);
-  text-align: right;
+.amount-input{
+  flex:1;padding:0 20px;height:60px;
+  background:none;border:none;
+  color:var(--white);
+  font-family:'Bebas Neue',sans-serif;
+  font-size:34px;letter-spacing:1px;
 }
+.amount-input:focus{outline:none;}
+.amount-input::placeholder{color:var(--dim);}
+.amount-hint{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--dim);margin-bottom:24px;}
+.amount-hint b{color:var(--acc2);}
 
-/* ===== WEAPON CALC ===== */
-.wc-section-label {
-  font-size: 11px; letter-spacing: 3px; color: var(--sub);
-  display: block; margin-bottom: 10px;
+/* taxa buttons */
+.taxa-label{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.taxa-label::after{content:'';flex:1;height:1px;background:var(--line);}
+.taxa-row{display:flex;gap:12px;margin-bottom:28px;}
+.taxa-btn{
+  flex:1;padding:16px 20px;
+  background:rgba(0,0,0,.3);
+  border:2px solid var(--line);
+  border-radius:2px;
+  cursor:pointer;transition:all .15s;
+  text-align:center;position:relative;overflow:hidden;
 }
-.weapon-btns { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
-.weapon-btn {
-  padding: 9px 16px;
-  background: rgba(0,0,0,0.4);
-  border: 2px solid rgba(255,255,255,0.1);
-  border-radius: 10px;
-  color: var(--sub);
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 14px; font-weight: 700; letter-spacing: 0.5px;
-  cursor: pointer; transition: all 0.15s;
-}
-.weapon-btn:hover { border-color: rgba(221,136,255,0.4); color: var(--pur); }
-.weapon-btn.active {
-  background: rgba(221,136,255,0.12);
-  border-color: var(--pur); color: var(--pur);
-  box-shadow: 0 0 12px rgba(221,136,255,0.15);
-}
+.taxa-btn:hover{border-color:rgba(0,230,180,.25);background:rgba(0,230,180,.04);}
+.taxa-btn.active{border-color:var(--acc);background:rgba(0,230,180,.09);}
+.taxa-btn.active::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,230,180,.07),transparent);}
+.taxa-pct{font-family:'Bebas Neue',sans-serif;font-size:40px;line-height:1;color:var(--text);transition:color .15s;}
+.taxa-btn.active .taxa-pct{color:var(--acc);}
+.taxa-lbl{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--muted);margin-top:4px;}
+.taxa-btn.active .taxa-lbl{color:var(--acc2);}
+.taxa-val{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim);margin-top:6px;transition:color .15s;}
+.taxa-btn.active .taxa-val{color:var(--acc2);}
 
-.attach-btns { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
-.attach-btn {
-  padding: 8px 14px;
-  background: rgba(0,0,0,0.35);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 9px;
-  color: var(--sub);
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 13px; font-weight: 600;
-  cursor: pointer; transition: all 0.15s;
+/* calc button */
+.btn-calc-main{
+  width:100%;padding:18px;
+  background:linear-gradient(135deg,rgba(0,230,180,.18),rgba(0,201,255,.12));
+  border:1px solid rgba(0,230,180,.35);
+  color:var(--acc);
+  font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;
+  cursor:pointer;transition:all .15s;border-radius:2px;
+  position:relative;overflow:hidden;
 }
-.attach-btn:hover { border-color: rgba(0,255,136,0.3); color: #00ff88; }
-.attach-btn.active {
-  background: rgba(0,255,136,0.08);
-  border-color: #00ff88; color: #00ff88;
-}
+.btn-calc-main:hover{background:linear-gradient(135deg,rgba(0,230,180,.25),rgba(0,201,255,.18));border-color:var(--acc);}
+.btn-calc-main:active{transform:scale(.99);}
 
-.qty-row {
-  display: flex; align-items: center; gap: 14px;
-  margin-bottom: 22px;
+/* ─ RESULT ─ */
+.launder-result{
+  display:none;
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:2px;padding:28px;position:relative;overflow:hidden;
+  animation:mat-in .25s ease;
 }
-.qty-row label { font-size: 12px; letter-spacing: 2px; color: var(--sub); white-space: nowrap; font-weight: 700; }
-.qty-row input {
-  width: 110px; padding: 10px 14px;
-  background: rgba(0,0,0,0.4);
-  border: 2px solid var(--border);
-  border-radius: 10px;
-  color: var(--text);
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 17px; font-weight: 700;
-}
-.qty-row input:focus { outline: none; border-color: rgba(221,136,255,0.4); }
+.launder-result::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--acc3),var(--acc),transparent);opacity:.5;}
+.launder-result.show{display:block;}
 
-.wc-result {
-  background: rgba(221,136,255,0.04);
-  border: 1px solid rgba(221,136,255,0.18);
-  border-radius: 18px; padding: 22px;
-}
-.wc-result-title {
-  font-size: 16px; font-weight: 900;
-  color: var(--pur); letter-spacing: 1px;
-  margin-bottom: 16px; text-align: center;
-}
-.wc-mats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.wc-mat-box {
-  background: rgba(0,0,0,0.4);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 12px; padding: 14px 16px;
-  display: flex; align-items: center; gap: 12px;
-}
-.wc-mat-box .wq {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 22px; font-weight: 700;
-  color: var(--pur); min-width: 56px;
-}
-.wc-mat-box .wn { font-size: 13px; font-weight: 700; color: #bbb; text-transform: uppercase; letter-spacing: 0.5px; }
+.res-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px;}
+.res-box{background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:2px;padding:18px 16px;text-align:center;position:relative;}
+.res-box.highlight{border-color:rgba(0,230,180,.3);background:rgba(0,230,180,.06);}
+.res-label{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;}
+.res-value{font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1;color:var(--text);}
+.res-box.highlight .res-value{color:var(--acc);}
+.res-box.danger .res-value{color:var(--danger);}
+.res-box.cyan .res-value{color:var(--acc2);}
 
-.wc-empty {
-  padding: 50px 0; text-align: center;
-  color: var(--sub); font-size: 15px;
-  font-weight: 700; letter-spacing: 2px;
+/* big result */
+.res-big{
+  background:rgba(0,0,0,.5);
+  border:1px solid rgba(0,230,180,.2);
+  border-radius:2px;padding:24px;
+  text-align:center;
+  position:relative;overflow:hidden;
 }
-.attach-section { display: none; }
-
-/* ===== FOOTER ===== */
-footer {
-  position: relative; z-index: 1;
-  text-align: center;
-  padding: 30px;
-  font-size: 13px;
-  color: var(--sub);
-  border-top: 1px solid var(--border);
-  letter-spacing: 1px;
+.res-big::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 50% at 50% 100%,rgba(0,230,180,.07),transparent);
 }
-footer b { color: var(--p); }
+.res-big-label{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:4px;color:var(--muted);text-transform:uppercase;margin-bottom:12px;}
+.res-big-value{
+  font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,8vw,68px);line-height:1;
+  background:linear-gradient(90deg,var(--acc),var(--acc2),var(--acc3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  letter-spacing:1px;
+}
+.res-big-sub{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim);letter-spacing:2px;margin-top:8px;}
 
-/* ===== SCROLLBAR ===== */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: #060a0d; }
-::-webkit-scrollbar-thumb { background: var(--p); border-radius: 6px; }
+/* reset launder */
+.btn-reset-launder{
+  width:100%;margin-top:16px;padding:12px;
+  background:rgba(232,64,64,.06);border:1px solid rgba(232,64,64,.22);
+  color:var(--danger);font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;
+  cursor:pointer;transition:all .12s;border-radius:1px;
+}
+.btn-reset-launder:hover{background:rgba(232,64,64,.14);border-color:var(--danger);}
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 600px) {
-  header { padding: 12px 16px; }
-  .logo { font-size: 16px; }
-  .nav-strip { padding: 20px 12px 0 12px; }
-  main { padding: 0 12px 60px 12px; }
-  .section { padding: 22px 16px; }
-  .ing-grid { grid-template-columns: 1fr; }
-  .b2m-result-grid { grid-template-columns: 1fr; }
-  .wc-mats-grid { grid-template-columns: 1fr; }
-  .b2m-grid { grid-template-columns: 1fr; }
-  .result-title .big-num { font-size: 38px; }
+/* ─ FOOTER ─ */
+.site-footer{
+  position:relative;z-index:1;max-width:1120px;margin:0 auto;
+  border-top:1px solid var(--line);padding:18px 24px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;
+}
+.site-footer span{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim);letter-spacing:2px;}
+.site-footer b{color:var(--acc);}
+
+/* scrollbar */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg0);}
+::-webkit-scrollbar-thumb{background:var(--dim);}
+::-webkit-scrollbar-thumb:hover{background:var(--acc);}
+
+/* responsive */
+@media(max-width:600px){
+  .hdr-title{font-size:40px;}
+  .res-row{grid-template-columns:1fr;}
+  .taxa-row{flex-direction:column;}
+  .wh-name{font-size:34px;}
+  .weapon-hero,.controls-pad,.attach-wrap,.mats-wrap{padding-left:16px;padding-right:16px;}
+  .mats-grid{grid-template-columns:1fr 1fr;}
+  .nav-btn{padding:12px 16px;font-size:13px;}
 }
 </style>
 </head>
 <body>
 
-<div class="bg-grid"></div>
+<div class="bg-pattern"></div>
 <div class="bg-glow"></div>
 
-<header>
-  <div class="logo">SPT CALCULATOARE</div>
-  <div class="header-badge">ARME • TOOL SUITE</div>
-</header>
+<div class="wrap">
 
-<!-- NAV -->
-<div class="nav-strip">
-  <button class="nav-btn active" onclick="switchTab('meta')">
-    <span class="nb-icon">🧪</span>META TOOL SUITE
-  </button>
-  <button class="nav-btn" onclick="switchTab('arme')">
-    <span class="nb-icon">🔫</span>ARME TOOL SUITE
-  </button>
-</div>
-
-<main>
-
-  <!-- ===== META CALCULATOR ===== -->
-  <div id="tab-meta" class="section active">
-
-    <div class="recipe-box">
-      <b>📋 Rețetă META</b>
-      <span class="r-dim">1× Fosfor Roșu + 1× Acetonă + 1× Cristal Iod + 1× Pilule</span>
-      <span class="r-arrow">→</span>
-      <span class="r-result">1× Lichid Meta</span><br>
-      <span class="r-dim">1× Lichid Meta (8h frigider)</span>
-      <span class="r-arrow">→</span>
-      <span class="r-result">6× Bulgări Meta</span><br>
-      <span class="r-dim">9× Bulgări + 9× Pungulițe</span>
-      <span class="r-arrow">→</span>
-      <span class="r-result">9× META</span>
-      <span class="r-price">&nbsp;(1.600$/buc)</span>
+  <!-- ─ HEADER ─ -->
+  <header class="hdr">
+    <div>
+      <div class="hdr-tag">// SPT· TOOL SUITE · </div>
+      <div class="hdr-title">SPT<br><span>TOOLS</span></div>
     </div>
-
-    <!-- Sub tabs -->
-    <div class="sub-tabs">
-      <button class="sub-tab active" id="cTab1" onclick="switchCalcTab(1)">📦 PACHETE META</button>
-      <button class="sub-tab" id="cTab2" onclick="switchCalcTab(2)">🟡 BULGĂRI → META</button>
+    <div class="hdr-right">
+      <span class="hdr-version">BUILD 2026.05</span>
+      <div class="hdr-status"><div class="status-dot"></div>SISTEM ACTIV</div>
     </div>
+  </header>
 
-    <!-- Tab 1: Pachete -->
-    <div id="calcTab1">
-      <span class="preset-label">PACHETE PRESTABILITE:</span>
-      <div class="presets">
-        <button class="preset-btn" onclick="calcMeta(100)">100</button>
-        <button class="preset-btn" onclick="calcMeta(200)">200</button>
-        <button class="preset-btn" onclick="calcMeta(300)">300</button>
-        <button class="preset-btn" onclick="calcMeta(500)">500</button>
-        <button class="preset-btn" onclick="calcMeta(800)">800</button>
-        <button class="preset-btn" onclick="calcMeta(1000)">1000</button>
-      </div>
-      <div class="input-row">
-        <input type="number" id="calcCustom" placeholder="Număr custom de pachete..." min="1" oninput="calcMeta(this.value)">
-        <button class="btn-calc" onclick="calcMeta(document.getElementById('calcCustom').value)">CALC</button>
-        <button class="btn-reset" onclick="resetMeta()">↺ RESET</button>
-      </div>
-      <div class="result-wrap" id="calcResult1">
-        <div class="result-hero">
-          <div class="result-title">
-            <div class="big-num" id="calcPachete"></div>
-            <small>PACHETE META</small>
-          </div>
-          <div class="ing-grid" id="calcIng"></div>
-        </div>
-        <div class="profit-box">
-          <small>CÂȘTIG TOTAL ESTIMAT</small>
-          <div class="profit-num" id="calcProfit1"></div>
-        </div>
-      </div>
-    </div>
+  <!-- ─ NAV ─ -->
+  <nav class="main-nav">
+    <button class="nav-btn active" onclick="switchSection('arme',this)">
+      <span class="nb-ic">🔫</span>ARME
+    </button>
+    <button class="nav-btn" onclick="switchSection('bani',this)">
+      <span class="nb-ic">💵</span>SPĂLARE BANI
+    </button>
+  </nav>
 
-    <!-- Tab 2: Bulgari -->
-    <div id="calcTab2" style="display:none;">
-      <div class="b2m-inputs">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-          <small style="margin:0;">INTRODU STOCUL TĂU:</small>
-          <button class="btn-reset" onclick="resetBulgari()">↺ RESET</button>
+  <!-- ══════════════════════════════════
+       SECTION: ARME
+  ══════════════════════════════════ -->
+  <div class="section active" id="sec-arme">
+    <div class="main-grid">
+
+      <!-- LEFT: lista -->
+      <div class="panel" style="position:sticky;top:20px;">
+        <div class="panel-hdr">
+          <span class="panel-label">Selectează arma</span>
+          <span class="panel-num" id="weaponCount"></span>
         </div>
-        <div class="b2m-grid">
-          <div>
-            <label>🟡 BULGĂRI DISPONIBILI</label>
-            <input type="number" id="calcBulgari" placeholder="ex: 54" min="0" oninput="calcBulgariMeta()">
-          </div>
-          <div>
-            <label>📦 PUNGULIȚE DISPONIBILE</label>
-            <input type="number" id="calcPungulite" placeholder="ex: 54" min="0" oninput="calcBulgariMeta()">
+        <div class="cat-strip" id="catStrip"></div>
+        <div class="weapon-list" id="weaponList"></div>
+      </div>
+
+      <!-- RIGHT: detalii -->
+      <div class="right-col">
+
+        <div class="panel" id="emptyPanel">
+          <div class="empty-state">
+            <div class="empty-icon">🎯</div>
+            <div class="empty-text">Nicio armă selectată<br>Alege din lista din stânga<br>pentru a vedea materialele</div>
           </div>
         </div>
-      </div>
-      <div class="result-wrap" id="calcResult2">
-        <div class="b2m-result-grid">
-          <div class="b2m-box green"><div class="bv" id="r2Meta"></div><small>META FINAL</small></div>
-          <div class="b2m-box blue"><div class="bv" id="r2Brem"></div><small>BULGĂRI RĂMAȘI</small></div>
-          <div class="b2m-box gold"><div class="bv" id="r2Prem"></div><small>PUNGULIȚE RĂMASE</small></div>
-        </div>
-        <div class="b2m-profit">
-          <div>
-            <div class="label">CÂȘTIG ESTIMAT</div>
-            <div class="val" id="r2Profit"></div>
+
+        <div class="detail-panel" id="detailPanel">
+          <div class="panel">
+            <div class="weapon-hero" id="weaponHero"></div>
           </div>
-          <div>
-            <div class="label" style="text-align:right;">BATCHES DE 9</div>
-            <div class="batch-val" id="r2Batches"></div>
+          <div class="panel">
+            <div class="controls-pad">
+              <div class="ctrl-row">
+                <span class="ctrl-label">Cantitate</span>
+                <div class="qty-control">
+                  <button class="qty-btn" onclick="changeQty(-1)">−</button>
+                  <input class="qty-input" id="wcQty" type="number" value="1" min="1" max="999" oninput="wcCalc()">
+                  <button class="qty-btn" onclick="changeQty(1)">+</button>
+                </div>
+                <button class="btn-reset" onclick="resetArme()">⟳ RESET</button>
+              </div>
+            </div>
+            <div class="attach-wrap" id="attachWrap">
+              <div class="section-ttl">Atașamente opționale</div>
+              <div class="attach-grid" id="attachGrid"></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="mats-wrap" id="matsWrap">
+              <div class="mats-head">
+                <span class="mats-lbl">Materiale necesare</span>
+                <div class="mats-div"></div>
+                <span class="mats-info" id="matsInfo"></span>
+              </div>
+              <div class="mats-grid" id="matsGrid"></div>
+            </div>
           </div>
         </div>
+
       </div>
     </div>
+  </div>
 
-  </div><!-- /tab-meta -->
+  <!-- ══════════════════════════════════
+       SECTION: SPALARE BANI
+  ══════════════════════════════════ -->
+  <div class="section" id="sec-bani">
+    <div class="launder-wrap">
 
-  <!-- ===== WEAPON CALCULATOR ===== -->
-  <div id="tab-arme" class="section">
+      <!-- Warning -->
+      <div class="warn-banner">
+        <div class="warn-icon">⚠️</div>
+        <div class="warn-text">
+          Minim de spălat: <b>$50.000</b><br>
+          Introdui suma murdară → alegi taxa → primești suma curată
+        </div>
+      </div>
 
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-      <span class="wc-section-label" style="margin:0;">SELECTEAZĂ ARMA:</span>
-      <button class="btn-reset" onclick="resetArme()">↺ RESET</button>
+      <!-- Input card -->
+      <div class="launder-card">
+        <div class="lc-title">Suma de spălat</div>
+
+        <div class="amount-field">
+          <div class="amount-prefix">$</div>
+          <input class="amount-input" id="launderAmt" type="number" min="50000" step="1000" placeholder="50 000" oninput="launderPreview()">
+        </div>
+        <div class="amount-hint" id="amountHint">Introdu minim <b>$50,000</b></div>
+
+        <div class="taxa-label">Taxa mașinii de spălat</div>
+        <div class="taxa-row">
+          <div class="taxa-btn" id="taxa5" onclick="selectTaxa(5)">
+            <div class="taxa-pct">5%</div>
+            <div class="taxa-lbl">TAXĂ MICĂ</div>
+            <div class="taxa-val" id="taxaVal5">— $0</div>
+          </div>
+          <div class="taxa-btn" id="taxa10" onclick="selectTaxa(10)">
+            <div class="taxa-pct">10%</div>
+            <div class="taxa-lbl">TAXĂ MARE</div>
+            <div class="taxa-val" id="taxaVal10">— $0</div>
+          </div>
+        </div>
+
+        <button class="btn-calc-main" onclick="calcLaunder()">CALCULEAZĂ</button>
+      </div>
+
+      <!-- Result card -->
+      <div class="launder-result" id="launderResult">
+        <div class="lc-title">Rezultat spălare</div>
+
+        <div class="res-row">
+          <div class="res-box">
+            <div class="res-label">Suma murdară</div>
+            <div class="res-value" id="resDirty"></div>
+          </div>
+          <div class="res-box danger">
+            <div class="res-label">Taxă reținută</div>
+            <div class="res-value" id="resTaxa"></div>
+          </div>
+          <div class="res-box cyan">
+            <div class="res-label">Procent taxă</div>
+            <div class="res-value" id="resPct"></div>
+          </div>
+        </div>
+
+        <div class="res-big">
+          <div class="res-big-label">💵 BANI CURAȚI PRIMIȚI</div>
+          <div class="res-big-value" id="resClean"></div>
+          <div class="res-big-sub" id="resSub"></div>
+        </div>
+
+        <button class="btn-reset-launder" onclick="resetLaunder()">⟳ RESETEAZĂ CALCULUL</button>
+      </div>
+
     </div>
-    <div class="weapon-btns" id="wcWeaponBtns"></div>
+  </div>
 
-    <div class="qty-row">
-      <label>CANTITATE:</label>
-      <input type="number" id="wcQty" value="1" min="1" oninput="wcCalc()">
-    </div>
+</div><!-- /wrap -->
 
-    <div class="attach-section" id="wcAttachSection">
-      <span class="wc-section-label">ATAȘAMENTE (opțional):</span>
-      <div class="attach-btns" id="wcAttachBtns"></div>
-    </div>
-
-    <div class="wc-result" id="wcResult" style="display:none;">
-      <div class="wc-result-title" id="wcTitle"></div>
-      <div class="wc-mats-grid" id="wcMatsGrid"></div>
-    </div>
-    <div class="wc-empty" id="wcEmpty">SELECTEAZĂ O ARMĂ PENTRU A VEDEA MATERIALELE</div>
-
-  </div><!-- /tab-arme -->
-
-</main>
-
-<footer>
-  Copyright 2026 &nbsp;<b>SPT Catalin</b>&nbsp; • &nbsp;INSTAGRAM: <b style="color:var(--s);">SPT.CATALIN</b>
+<footer class="site-footer">
+  <span>© 2026 &nbsp;<b>SPT CATALIN</b></span>
+  <span>INSTAGRAM: SPT.CATALIN</span>
 </footer>
 
 <script>
-// ===== RESET FUNCTIONS =====
-function resetMeta() {
-  document.getElementById('calcCustom').value = '';
-  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('selected'));
-  document.getElementById('calcResult1').classList.remove('show');
-  document.getElementById('calcIng').innerHTML = '';
-  document.getElementById('calcPachete').textContent = '';
-  document.getElementById('calcProfit1').textContent = '';
-}
-function resetBulgari() {
-  document.getElementById('calcBulgari').value   = '';
-  document.getElementById('calcPungulite').value = '';
-  document.getElementById('calcResult2').classList.remove('show');
-}
-function resetArme() {
-  wcSelectedWeapon = null;
-  wcSelectedAttach = new Set();
-  document.querySelectorAll('.weapon-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('wcAttachSection').style.display = 'none';
-  document.getElementById('wcAttachBtns').innerHTML = '';
-  document.getElementById('wcResult').style.display = 'none';
-  document.getElementById('wcEmpty').style.display  = 'block';
-  document.getElementById('wcQty').value = '1';
-}
-
-// ===== TAB SWITCH =====
-function switchTab(id) {
+// ════════════════════════════════════════
+//  NAV
+// ════════════════════════════════════════
+function switchSection(id, btn) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-' + id).classList.add('active');
-  event.currentTarget.classList.add('active');
-  if (id === 'arme') wcInit();
+  document.getElementById('sec-' + id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'arme') wcEnsureInit();
 }
 
-// ===== META CALC TAB SWITCH =====
-function switchCalcTab(t) {
-  document.getElementById('calcTab1').style.display = t === 1 ? 'block' : 'none';
-  document.getElementById('calcTab2').style.display = t === 2 ? 'block' : 'none';
-  document.getElementById('cTab1').classList.toggle('active', t === 1);
-  document.getElementById('cTab2').classList.toggle('active', t === 2);
-}
-
-// ===== CALCULATOR META: PACHETE =====
-function calcMeta(n) {
-  n = parseInt(n);
-  if (!n || n < 1) return;
-  document.getElementById('calcCustom').value = n;
-  document.querySelectorAll('.preset-btn').forEach(b => {
-    b.classList.toggle('selected', parseInt(b.textContent) === n);
-  });
-  const lichide      = Math.ceil(n / 6);
-  const bulgariProd  = lichide * 6;
-  const waste        = bulgariProd - n;
-
-  document.getElementById('calcPachete').textContent = n.toLocaleString();
-  document.getElementById('calcProfit1').textContent  = '$' + (n * 1600).toLocaleString();
-
-  document.getElementById('calcIng').innerHTML = `
-    <div class="ing-box"><span class="iq">${lichide}</span><span class="in">🔴 Fosfor Roșu</span></div>
-    <div class="ing-box"><span class="iq">${lichide}</span><span class="in">🧪 Acetonă</span></div>
-    <div class="ing-box"><span class="iq">${lichide}</span><span class="in">💎 Cristal de Iod</span></div>
-    <div class="ing-box"><span class="iq">${lichide}</span><span class="in">💊 Pilule Decong.</span></div>
-    <div class="ing-box cyan"><span class="iq">${lichide}</span><span class="in">🧴 Lichide Meta</span></div>
-    <div class="ing-box cyan"><span class="iq">${bulgariProd}</span><span class="in">🟡 Bulgări Meta<br><small style="color:#444;font-size:10px;">${waste > 0 ? waste + ' în surplus' : 'exact necesar'}</small></span></div>
-    <div class="ing-box gold"><span class="iq">${n}</span><span class="in">📦 Pungulițe</span></div>
-    <div class="ing-box red"><span class="iq">${n}</span><span class="in">💎 META Final</span></div>
-  `;
-  const r = document.getElementById('calcResult1');
-  r.classList.add('show');
-}
-
-// ===== CALCULATOR META: BULGARI =====
-function calcBulgariMeta() {
-  const b = parseInt(document.getElementById('calcBulgari').value)   || 0;
-  const p = parseInt(document.getElementById('calcPungulite').value) || 0;
-  if (!b && !p) return;
-  const batches = Math.floor(Math.min(b, p) / 9);
-  const meta    = batches * 9;
-  const bRem    = b - batches * 9;
-  const pRem    = p - batches * 9;
-  document.getElementById('r2Meta').textContent    = meta.toLocaleString();
-  document.getElementById('r2Brem').textContent    = bRem.toLocaleString();
-  document.getElementById('r2Prem').textContent    = pRem.toLocaleString();
-  document.getElementById('r2Profit').textContent  = '$' + (meta * 1600).toLocaleString();
-  document.getElementById('r2Batches').textContent = batches + '×';
-  document.getElementById('calcResult2').classList.add('show');
-}
-
-// ===== WEAPON CALC DATA =====
-const WC_WEAPONS = [
-  { id:'micro_smg',    name:'Micro SMG',      cat:'SMG',   mats:{ otel:15, suruburi:95,  arc:1, polimer:42, teava:1 } },
-  { id:'tec9',         name:'TEC-9',           cat:'SMG',   mats:{ otel:12, suruburi:100, arc:1, polimer:38 } },
-  { id:'mini_smg',     name:'Mini SMG',        cat:'SMG',   mats:{ otel:11, suruburi:97,  arc:1, polimer:36, lemn:1 } },
-  { id:'tec_pistol',   name:'TEC-Pistol',      cat:'Pistol',mats:{ otel:14, suruburi:115, arc:1, polimer:44, teava:1 } },
-  { id:'smg',          name:'SMG',             cat:'SMG',   mats:{ otel:13, suruburi:105, arc:1, polimer:48, teava:1 } },
-  { id:'combat_pdw',   name:'Combat PDW',      cat:'SMG',   mats:{ otel:14, suruburi:110, arc:1, polimer:50, teava:1 } },
-  { id:'assault_rifle',name:'Assault Rifle',   cat:'Rifle', mats:{ otel:17, suruburi:135, arc:2, polimer:68, lemn:1, teava:1 } },
-  { id:'compact_rifle',name:'Compact Rifle',   cat:'Rifle', mats:{ otel:19, suruburi:115, arc:2, polimer:44, lemn:1, teava:1 } },
-  { id:'carabine_rifle',name:'Carabine Rifle', cat:'Rifle', mats:{ otel:18, suruburi:140, arc:2, polimer:72, teava:1 } },
-  { id:'advanced_rifle',name:'Advanced Rifle', cat:'Rifle', mats:{ otel:18, suruburi:145, arc:2, polimer:78, teava:1 } },
+// ════════════════════════════════════════
+//  WEAPONS DATA
+// ════════════════════════════════════════
+const WEAPONS = [
+  { id:'micro_smg',     name:'Micro SMG',      cat:'SMG',    code:'W-01', mats:{ otel:15, suruburi:95,  arc:1, polimer:42, teava:1         } },
+  { id:'tec9',          name:'TEC-9',           cat:'SMG',    code:'W-02', mats:{ otel:12, suruburi:100, arc:1, polimer:38                  } },
+  { id:'mini_smg',      name:'Mini SMG',        cat:'SMG',    code:'W-03', mats:{ otel:11, suruburi:97,  arc:1, polimer:36, lemn:1          } },
+  { id:'smg',           name:'SMG',             cat:'SMG',    code:'W-04', mats:{ otel:13, suruburi:105, arc:1, polimer:48, teava:1         } },
+  { id:'combat_pdw',    name:'Combat PDW',      cat:'SMG',    code:'W-05', mats:{ otel:14, suruburi:110, arc:1, polimer:50, teava:1         } },
+  { id:'tec_pistol',    name:'TEC-Pistol',      cat:'Pistol', code:'W-06', mats:{ otel:14, suruburi:115, arc:1, polimer:44, teava:1         } },
+  { id:'assault_rifle', name:'Assault Rifle',   cat:'Rifle',  code:'W-07', mats:{ otel:17, suruburi:135, arc:2, polimer:68, lemn:1, teava:1 } },
+  { id:'compact_rifle', name:'Compact Rifle',   cat:'Rifle',  code:'W-08', mats:{ otel:19, suruburi:115, arc:2, polimer:44, lemn:1, teava:1 } },
+  { id:'carabine_rifle',name:'Carabine Rifle',  cat:'Rifle',  code:'W-09', mats:{ otel:18, suruburi:140, arc:2, polimer:72, teava:1         } },
+  { id:'advanced_rifle',name:'Advanced Rifle',  cat:'Rifle',  code:'W-10', mats:{ otel:18, suruburi:145, arc:2, polimer:78, teava:1         } },
 ];
-
-const WC_ATTACHMENTS = [
-  { id:'amort_micro_smg',   name:'Amortizor Micro SMG',         for:['micro_smg'],    mats:{ otel:3, suruburi:5,  polimer:3 } },
-  { id:'amort_tec9',        name:'Amortizor TEC-9',             for:['tec9'],         mats:{ otel:2, suruburi:5,  polimer:2 } },
-  { id:'amort_tec_pistol',  name:'Muzzle Brake TEC-Pistol',     for:['tec_pistol'],   mats:{ otel:3, suruburi:5,  polimer:3 } },
-  { id:'amort_smg',         name:'Amortizor SMG',               for:['smg'],          mats:{ otel:3, suruburi:5,  polimer:3 } },
-  { id:'amort_assault',     name:'Amortizor Assault Rifle',     for:['assault_rifle'],mats:{ otel:3, suruburi:5,  polimer:3 } },
-  { id:'amort_carbine',     name:'Amortizor Carabine',          for:['carabine_rifle'],mats:{ otel:3, suruburi:5, polimer:3 } },
-  { id:'amort_advanced',    name:'Amortizor Advanced Rifle',    for:['advanced_rifle'],mats:{ otel:3, suruburi:5, polimer:3 } },
-  { id:'inc_micro_smg',     name:'Încărcător Micro SMG',        for:['micro_smg'],    mats:{ otel:2, suruburi:10, polimer:2, arc:1 } },
-  { id:'inc_tec9',          name:'Încărcător TEC-9',            for:['tec9'],         mats:{ otel:2, suruburi:8,  polimer:2, arc:1 } },
-  { id:'inc_tec_pistol',    name:'Încărcător TEC-Pistol',       for:['tec_pistol'],   mats:{ otel:2, suruburi:10, polimer:2, arc:1 } },
-  { id:'inc_smg',           name:'Încărcător SMG',              for:['smg'],          mats:{ otel:2, suruburi:10, polimer:2, arc:1 } },
-  { id:'bat_smg',           name:'Baterie Gloanțe SMG',         for:['smg'],          mats:{ otel:3, suruburi:20, polimer:3, arc:1 } },
-  { id:'inc_assault',       name:'Încărcător Assault Rifle',    for:['assault_rifle'],mats:{ otel:2, suruburi:5,  polimer:2, arc:1 } },
-  { id:'bat_assault',       name:'Baterie Gloanțe Assault',     for:['assault_rifle'],mats:{ otel:3, suruburi:20, polimer:3, arc:1 } },
-  { id:'grip_assault',      name:'Grip Assault Rifle',          for:['assault_rifle'],mats:{ otel:1, suruburi:5,  polimer:1 } },
-  { id:'inc_compact',       name:'Încărcător Compact Rifle',    for:['compact_rifle'],mats:{ otel:3, suruburi:30, polimer:3, arc:1 } },
-  { id:'bat_compact',       name:'Baterie Gloanțe Compact',     for:['compact_rifle'],mats:{ otel:3, suruburi:20, polimer:3, arc:1 } },
-  { id:'bat_carabine',      name:'Baterie Gloanțe Carabine',    for:['carabine_rifle'],mats:{ otel:3, suruburi:20, polimer:3, arc:1 } },
-  { id:'inc_advanced',      name:'Încărcător Advanced Rifle',   for:['advanced_rifle'],mats:{ otel:1, suruburi:5, polimer:1, arc:1 } },
+const ATTACHMENTS = [
+  { id:'amort_micro',   name:'Amortizor',       for:['micro_smg'],     mats:{ otel:3, suruburi:5,  polimer:3        } },
+  { id:'amort_tec9',    name:'Amortizor',       for:['tec9'],          mats:{ otel:2, suruburi:5,  polimer:2        } },
+  { id:'amort_tpist',   name:'Muzzle Brake',    for:['tec_pistol'],    mats:{ otel:3, suruburi:5,  polimer:3        } },
+  { id:'amort_smg',     name:'Amortizor',       for:['smg'],           mats:{ otel:3, suruburi:5,  polimer:3        } },
+  { id:'amort_assault', name:'Amortizor',       for:['assault_rifle'], mats:{ otel:3, suruburi:5,  polimer:3        } },
+  { id:'amort_carbine', name:'Amortizor',       for:['carabine_rifle'],mats:{ otel:3, suruburi:5,  polimer:3        } },
+  { id:'amort_adv',     name:'Amortizor',       for:['advanced_rifle'],mats:{ otel:3, suruburi:5,  polimer:3        } },
+  { id:'inc_micro',     name:'Încărcător Ext.', for:['micro_smg'],     mats:{ otel:2, suruburi:10, polimer:2, arc:1 } },
+  { id:'inc_tec9',      name:'Încărcător Ext.', for:['tec9'],          mats:{ otel:2, suruburi:8,  polimer:2, arc:1 } },
+  { id:'inc_tpist',     name:'Încărcător Ext.', for:['tec_pistol'],    mats:{ otel:2, suruburi:10, polimer:2, arc:1 } },
+  { id:'inc_smg',       name:'Încărcător Ext.', for:['smg'],           mats:{ otel:2, suruburi:10, polimer:2, arc:1 } },
+  { id:'bat_smg',       name:'Baterie Gloanțe', for:['smg'],           mats:{ otel:3, suruburi:20, polimer:3, arc:1 } },
+  { id:'inc_assault',   name:'Încărcător Ext.', for:['assault_rifle'], mats:{ otel:2, suruburi:5,  polimer:2, arc:1 } },
+  { id:'bat_assault',   name:'Baterie Gloanțe', for:['assault_rifle'], mats:{ otel:3, suruburi:20, polimer:3, arc:1 } },
+  { id:'grip_assault',  name:'Grip Vertical',   for:['assault_rifle'], mats:{ otel:1, suruburi:5,  polimer:1        } },
+  { id:'inc_compact',   name:'Încărcător Ext.', for:['compact_rifle'], mats:{ otel:3, suruburi:30, polimer:3, arc:1 } },
+  { id:'bat_compact',   name:'Baterie Gloanțe', for:['compact_rifle'], mats:{ otel:3, suruburi:20, polimer:3, arc:1 } },
+  { id:'bat_carbine',   name:'Baterie Gloanțe', for:['carabine_rifle'],mats:{ otel:3, suruburi:20, polimer:3, arc:1 } },
+  { id:'inc_adv',       name:'Încărcător Ext.', for:['advanced_rifle'],mats:{ otel:1, suruburi:5,  polimer:1, arc:1 } },
 ];
-
-const WC_MAT_LABELS = {
-  otel:     '⚙️ Oțel',
-  suruburi: '🔩 Șuruburi',
-  arc:      '🌀 Arc Metalic',
-  polimer:  '💧 Polimer',
-  teava:    '🔧 Țeavă Metalică',
-  lemn:     '🪵 Bucată de Lemn',
+const MAT_META = {
+  otel:     { label:'Oțel',          unit:'unități' },
+  suruburi: { label:'Șuruburi',       unit:'bucăți'  },
+  arc:      { label:'Arc Metalic',    unit:'bucăți'  },
+  polimer:  { label:'Polimer',        unit:'unități' },
+  teava:    { label:'Țeavă Metalică', unit:'bucăți'  },
+  lemn:     { label:'Lemn',           unit:'bucăți'  },
 };
 
-let wcSelectedWeapon  = null;
-let wcSelectedAttach  = new Set();
-let wcInited          = false;
+let selectedWeapon = null, selectedAttach = new Set(), activeCat = 'Toate', wcBuilt = false;
 
-function wcInit() {
-  if (wcInited) return;
-  wcInited = true;
-  const wb = document.getElementById('wcWeaponBtns');
-  WC_WEAPONS.forEach(w => {
+function wcEnsureInit() { if (!wcBuilt) { buildCats(); buildWeaponList(); wcBuilt = true; } }
+
+const CATS = ['Toate', ...new Set(WEAPONS.map(w => w.cat))];
+function buildCats() {
+  const strip = document.getElementById('catStrip');
+  CATS.forEach(c => {
     const b = document.createElement('button');
-    b.className = 'weapon-btn';
-    b.id = 'wcw_' + w.id;
-    b.textContent = w.name;
-    b.onclick = () => wcSelectWeapon(w.id);
-    wb.appendChild(b);
+    b.className = 'cat-btn' + (c === activeCat ? ' active' : '');
+    b.textContent = c;
+    b.onclick = () => {
+      activeCat = c;
+      document.querySelectorAll('.cat-btn').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      filterWeapons();
+    };
+    strip.appendChild(b);
   });
 }
-
-function wcSelectWeapon(id) {
-  wcSelectedWeapon = id;
-  wcSelectedAttach = new Set();
-  document.querySelectorAll('.weapon-btn').forEach(b =>
-    b.classList.toggle('active', b.id === 'wcw_' + id)
-  );
-  const avail = WC_ATTACHMENTS.filter(a => a.for.includes(id));
-  const sec  = document.getElementById('wcAttachSection');
-  const ab   = document.getElementById('wcAttachBtns');
+function filterWeapons() {
+  let vis = 0;
+  document.querySelectorAll('.weapon-row').forEach(r => {
+    const show = activeCat === 'Toate' || r.dataset.cat === activeCat;
+    r.classList.toggle('hidden', !show);
+    if (show) vis++;
+  });
+  document.getElementById('weaponCount').textContent = vis + ' / ' + WEAPONS.length;
+}
+function buildWeaponList() {
+  const list = document.getElementById('weaponList');
+  WEAPONS.forEach(w => {
+    const row = document.createElement('div');
+    row.className = 'weapon-row'; row.id = 'wr_' + w.id; row.dataset.cat = w.cat;
+    row.innerHTML = `<div class="wr-code">${w.code}</div><div class="wr-info"><div class="wr-name">${w.name}</div><div class="wr-cat">${w.cat}</div></div><div class="wr-arrow">›</div>`;
+    row.onclick = () => selectWeapon(w.id);
+    list.appendChild(row);
+  });
+  document.getElementById('weaponCount').textContent = WEAPONS.length + ' / ' + WEAPONS.length;
+}
+function selectWeapon(id) {
+  selectedWeapon = id; selectedAttach = new Set();
+  document.querySelectorAll('.weapon-row').forEach(r => r.classList.toggle('active', r.id === 'wr_' + id));
+  const w = WEAPONS.find(x => x.id === id);
+  document.getElementById('weaponHero').innerHTML = `<div><div class="wh-name">${w.name}</div><div class="wh-cat">${w.cat} · ${w.code}</div></div><div><span class="wh-tag">SELECTED</span></div>`;
+  const avail = ATTACHMENTS.filter(a => a.for.includes(id));
+  const wrap = document.getElementById('attachWrap'), grid = document.getElementById('attachGrid');
+  grid.innerHTML = '';
   if (avail.length) {
-    sec.style.display = 'block';
-    ab.innerHTML = '';
+    wrap.style.display = 'block';
     avail.forEach(a => {
-      const b = document.createElement('button');
-      b.className = 'attach-btn';
-      b.id = 'wca_' + a.id;
-      b.textContent = a.name;
-      b.onclick = () => {
-        if (wcSelectedAttach.has(a.id)) wcSelectedAttach.delete(a.id);
-        else wcSelectedAttach.add(a.id);
-        b.classList.toggle('active');
-        wcCalc();
-      };
-      ab.appendChild(b);
+      const el = document.createElement('div');
+      el.className = 'attach-item'; el.id = 'att_' + a.id;
+      el.innerHTML = `<div class="a-check">✓</div><div class="a-name">${a.name}</div>`;
+      el.onclick = () => { if(selectedAttach.has(a.id)) selectedAttach.delete(a.id); else selectedAttach.add(a.id); el.classList.toggle('active', selectedAttach.has(a.id)); wcCalc(); };
+      grid.appendChild(el);
     });
-  } else {
-    sec.style.display = 'none';
-  }
+  } else { wrap.style.display = 'none'; }
+  document.getElementById('emptyPanel').style.display = 'none';
+  document.getElementById('detailPanel').classList.add('show');
+  document.getElementById('matsWrap').classList.add('show');
   wcCalc();
 }
-
 function wcCalc() {
-  if (!wcSelectedWeapon) {
-    document.getElementById('wcResult').style.display = 'none';
-    document.getElementById('wcEmpty').style.display  = 'block';
-    return;
-  }
+  if (!selectedWeapon) return;
   const qty = Math.max(1, parseInt(document.getElementById('wcQty').value) || 1);
-  const w   = WC_WEAPONS.find(x => x.id === wcSelectedWeapon);
+  const w = WEAPONS.find(x => x.id === selectedWeapon);
   const totals = {};
-  const addM = (mats, mult) => Object.entries(mats).forEach(([k, v]) => {
-    totals[k] = (totals[k] || 0) + v * mult;
-  });
+  const addM = (mats, mult) => Object.entries(mats).forEach(([k,v]) => { totals[k]=(totals[k]||0)+v*mult; });
   addM(w.mats, qty);
-  wcSelectedAttach.forEach(aid => {
-    const a = WC_ATTACHMENTS.find(x => x.id === aid);
-    if (a) addM(a.mats, qty);
-  });
-
-  const attachNames = [...wcSelectedAttach].map(aid =>
-    WC_ATTACHMENTS.find(x => x.id === aid)?.name
-  ).filter(Boolean);
-  let title = w.name + ' × ' + qty;
-  if (attachNames.length) title += ' + ' + attachNames.join(', ');
-  document.getElementById('wcTitle').textContent = title;
-
-  const mg = document.getElementById('wcMatsGrid');
-  mg.innerHTML = '';
+  selectedAttach.forEach(aid => { const a=ATTACHMENTS.find(x=>x.id===aid); if(a) addM(a.mats,qty); });
+  const attN = selectedAttach.size;
+  document.getElementById('matsInfo').textContent = qty + '× ' + w.name + (attN ? ' + ' + attN + ' ATT' : '');
+  const grid = document.getElementById('matsGrid'); grid.innerHTML = '';
   ['otel','suruburi','arc','polimer','teava','lemn'].forEach(k => {
     if (!totals[k]) return;
-    const d = document.createElement('div');
-    d.className = 'wc-mat-box';
-    d.innerHTML = `<span class="wq">${totals[k]}</span><span class="wn">${WC_MAT_LABELS[k] || k}</span>`;
-    mg.appendChild(d);
+    const m = MAT_META[k];
+    const d = document.createElement('div'); d.className = 'mat-card';
+    d.innerHTML = `<div class="mat-qty">${totals[k]}</div><div><div class="mat-name">${m.label}</div><div class="mat-unit">${m.unit}</div></div>`;
+    grid.appendChild(d);
   });
-  document.getElementById('wcResult').style.display = 'block';
-  document.getElementById('wcEmpty').style.display  = 'none';
 }
+function changeQty(d) {
+  const inp = document.getElementById('wcQty');
+  inp.value = Math.max(1, Math.min(999, (parseInt(inp.value)||1) + d));
+  wcCalc();
+}
+function resetArme() {
+  selectedWeapon = null; selectedAttach = new Set();
+  document.querySelectorAll('.weapon-row').forEach(r => r.classList.remove('active'));
+  activeCat = 'Toate';
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b.textContent==='Toate'));
+  filterWeapons();
+  document.getElementById('wcQty').value = '1';
+  document.getElementById('emptyPanel').style.display = '';
+  document.getElementById('detailPanel').classList.remove('show');
+  document.getElementById('matsWrap').classList.remove('show');
+  document.getElementById('attachWrap').style.display = 'none';
+  document.getElementById('attachGrid').innerHTML = '';
+  document.getElementById('matsGrid').innerHTML = '';
+}
+
+// ════════════════════════════════════════
+//  SPALARE BANI
+// ════════════════════════════════════════
+let selectedTaxa = null;
+
+function fmt(n) {
+  return '$' + Math.round(n).toLocaleString('ro-RO');
+}
+
+function selectTaxa(pct) {
+  selectedTaxa = pct;
+  document.getElementById('taxa5').classList.toggle('active',  pct === 5);
+  document.getElementById('taxa10').classList.toggle('active', pct === 10);
+  launderPreview();
+}
+
+function launderPreview() {
+  const amt = parseFloat(document.getElementById('launderAmt').value) || 0;
+  const hint = document.getElementById('amountHint');
+
+  if (amt > 0 && amt < 50000) {
+    hint.innerHTML = '⚠ Suma minimă este <b>$50,000</b>';
+    hint.style.color = 'var(--danger)';
+  } else if (amt >= 50000) {
+    hint.innerHTML = '✓ Sumă validă: <b>' + fmt(amt) + '</b>';
+    hint.style.color = 'var(--acc)';
+  } else {
+    hint.innerHTML = 'Introdu minim <b>$50,000</b>';
+    hint.style.color = '';
+  }
+
+  // live update taxa values
+  if (amt >= 50000) {
+    document.getElementById('taxaVal5').textContent  = '— ' + fmt(amt * 0.05)  + ' taxă';
+    document.getElementById('taxaVal10').textContent = '— ' + fmt(amt * 0.10) + ' taxă';
+  } else {
+    document.getElementById('taxaVal5').textContent  = '— $0';
+    document.getElementById('taxaVal10').textContent = '— $0';
+  }
+}
+
+function calcLaunder() {
+  const amt = parseFloat(document.getElementById('launderAmt').value) || 0;
+
+  if (amt < 50000) {
+    document.getElementById('amountHint').innerHTML = '⛔ Suma minimă este <b>$50,000</b>!';
+    document.getElementById('amountHint').style.color = 'var(--danger)';
+    document.getElementById('launderAmt').focus();
+    return;
+  }
+  if (!selectedTaxa) {
+    alert('Selectează taxa: 5% sau 10%');
+    return;
+  }
+
+  const taxa  = amt * (selectedTaxa / 100);
+  const clean = amt - taxa;
+
+  document.getElementById('resDirty').textContent = fmt(amt);
+  document.getElementById('resTaxa').textContent  = fmt(taxa);
+  document.getElementById('resPct').textContent   = selectedTaxa + '%';
+  document.getElementById('resClean').textContent = fmt(clean);
+  document.getElementById('resSub').textContent   =
+    'Din ' + fmt(amt) + ' murdar → ' + fmt(clean) + ' curat · taxă ' + selectedTaxa + '%';
+
+  document.getElementById('launderResult').classList.add('show');
+  document.getElementById('launderResult').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function resetLaunder() {
+  document.getElementById('launderAmt').value = '';
+  selectedTaxa = null;
+  document.getElementById('taxa5').classList.remove('active');
+  document.getElementById('taxa10').classList.remove('active');
+  document.getElementById('taxaVal5').textContent  = '— $0';
+  document.getElementById('taxaVal10').textContent = '— $0';
+  document.getElementById('amountHint').innerHTML  = 'Introdu minim <b>$50,000</b>';
+  document.getElementById('amountHint').style.color = '';
+  document.getElementById('launderResult').classList.remove('show');
+}
+
+// ── INIT ──
+wcEnsureInit();
 </script>
 </body>
 </html>

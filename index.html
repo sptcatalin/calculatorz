@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SPT TOOLS — </title>
+<title>SPT TOOLS —</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Barlow+Condensed:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -27,7 +27,7 @@ body {
   font-family: 'Barlow Condensed', sans-serif;
   min-height: 100vh;
 }
- 
+
 /* ── BG EFFECTS ── */
 .bg-grid {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
@@ -42,14 +42,14 @@ body {
     radial-gradient(ellipse 60% 50% at 0% 0%, rgba(0,230,180,0.07) 0%, transparent 60%),
     radial-gradient(ellipse 50% 40% at 100% 100%, rgba(0,201,255,0.06) 0%, transparent 60%);
 }
- 
+
 /* ── LAYOUT ── */
 .wrap {
   position: relative; z-index: 1;
   max-width: 1120px; margin: 0 auto;
   padding: 0 24px 80px;
 }
- 
+
 /* ── HEADER ── */
 .hdr {
   display: flex; align-items: flex-end; justify-content: space-between;
@@ -74,7 +74,7 @@ body {
 .hdr-status { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 2px; color: var(--acc); }
 .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--acc); box-shadow: 0 0 10px var(--acc); animation: blink 2s infinite; }
 @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:.3;} }
- 
+
 /* ── NAV ── */
 .nav {
   display: flex; border-bottom: 1px solid var(--line);
@@ -90,12 +90,12 @@ body {
 }
 .nav-btn:hover { color: var(--text); background: rgba(0,230,180,.03); }
 .nav-btn.active { color: var(--acc); border-bottom-color: var(--acc); background: rgba(0,230,180,.04); }
- 
+
 /* ── SECTIONS ── */
 .section { display: none; padding-top: 28px; }
 .section.active { display: block; animation: fi .2s ease; }
 @keyframes fi { from{opacity:0;transform:translateY(5px);} to{opacity:1;transform:none;} }
- 
+
 /* ── PANEL ── */
 .panel {
   background: var(--panel); border: 1px solid var(--line); border-radius: 2px;
@@ -110,13 +110,13 @@ body {
 .ph-num { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--dim); }
 .mono { font-family: 'Share Tech Mono', monospace; }
 .bebas { font-family: 'Bebas Neue', sans-serif; }
- 
+
 /* ══════════════════════════════════════
    ARME
 ══════════════════════════════════════ */
 .two-col { display: grid; grid-template-columns: 320px 1fr; gap: 20px; align-items: start; }
 @media(max-width:840px){ .two-col { grid-template-columns: 1fr; } }
- 
+
 /* category strip */
 .cat-strip { display: flex; border-bottom: 1px solid var(--line); }
 .cat-btn {
@@ -129,7 +129,7 @@ body {
 .cat-btn:last-child { border-right: none; }
 .cat-btn:hover { background: rgba(0,230,180,.04); color: var(--text); }
 .cat-btn.active { background: rgba(0,230,180,.08); color: var(--acc); border-bottom: 2px solid var(--acc); }
- 
+
 /* weapon list */
 .w-list { max-height: 520px; overflow-y: auto; padding: 4px 0; }
 .w-row {
@@ -150,23 +150,23 @@ body {
 .w-cat { font-size: 10px; font-weight: 600; letter-spacing: 2px; color: var(--muted); margin-top: 2px; }
 .w-arr { padding: 13px 12px; color: var(--dim); font-size: 16px; transition: color .12s; }
 .w-row:hover .w-arr, .w-row.active .w-arr { color: var(--acc); }
- 
+
 /* right col */
 .r-col { display: flex; flex-direction: column; gap: 16px; }
 .d-panel { display: none; flex-direction: column; gap: 16px; }
 .d-panel.show { display: flex; }
- 
+
 /* empty */
 .empty { padding: 80px 40px; text-align: center; }
 .empty-icon { font-size: 42px; margin-bottom: 16px; filter: grayscale(1) opacity(.2); }
 .empty-txt { font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 3px; color: var(--dim); text-transform: uppercase; line-height: 2.2; }
- 
+
 /* hero */
 .w-hero { padding: 20px 24px; display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
 .w-hero-name { font-family: 'Bebas Neue', sans-serif; font-size: 46px; line-height: 1; color: var(--white); }
 .w-hero-cat { font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 3px; color: var(--acc2); margin-top: 4px; }
 .w-badge { display: inline-block; background: rgba(0,230,180,.08); border: 1px solid rgba(0,230,180,.28); color: var(--acc); font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 2px; padding: 5px 14px; }
- 
+
 /* controls */
 .cpad { padding: 20px 24px; }
 .crow { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
@@ -178,7 +178,7 @@ body {
 .qinput:focus { outline: none; background: rgba(0,230,180,.04); }
 .btn-reset { margin-left: auto; padding: 9px 18px; background: rgba(232,64,64,.06); border: 1px solid rgba(232,64,64,.22); color: var(--danger); font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 2px; cursor: pointer; transition: all .12s; }
 .btn-reset:hover { background: rgba(232,64,64,.15); border-color: var(--danger); }
- 
+
 /* attachments */
 .att-wrap { padding: 0 24px 20px; display: none; }
 .sec-ttl { font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
@@ -191,7 +191,7 @@ body {
 .att-item.active .att-chk { background: var(--acc); border-color: var(--acc); color: #000; }
 .att-nm { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; line-height: 1.2; }
 .att-item.active .att-nm { color: var(--text); }
- 
+
 /* materials */
 .mats-wrap { padding: 22px 24px; display: none; }
 .mats-wrap.show { display: block; }
@@ -211,7 +211,7 @@ body {
 .mat-qty { font-family: 'Bebas Neue', sans-serif; font-size: 40px; line-height: 1; color: var(--white); min-width: 52px; text-align: center; }
 .mat-name { font-size: 14px; font-weight: 800; color: var(--text); text-transform: uppercase; line-height: 1; }
 .mat-unit { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; margin-top: 3px; }
- 
+
 /* ══════════════════════════════════════
    SPALARE BANI
 ══════════════════════════════════════ */
@@ -262,20 +262,20 @@ body {
 .big-sub { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--dim); letter-spacing: 2px; margin-top: 8px; }
 .btn-reset-l { width: 100%; margin-top: 16px; padding: 12px; background: rgba(232,64,64,.06); border: 1px solid rgba(232,64,64,.22); color: var(--danger); font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 2px; cursor: pointer; transition: all .12s; }
 .btn-reset-l:hover { background: rgba(232,64,64,.14); border-color: var(--danger); }
- 
+
 /* ══════════════════════════════════════
    MUNITIE
 ══════════════════════════════════════ */
 .ammo-grid { display: grid; grid-template-columns: 320px 1fr; gap: 20px; align-items: start; }
 @media(max-width:840px){ .ammo-grid { grid-template-columns: 1fr; } }
 .ammo-left { position: sticky; top: 20px; }
- 
+
 .acat-strip { display: flex; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
 .acat-btn { flex: 1; min-width: 55px; padding: 8px 6px; background: none; border: none; border-right: 1px solid var(--line); color: var(--muted); font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 1px; cursor: pointer; transition: all .12s; text-transform: uppercase; text-align: center; }
 .acat-btn:last-child { border-right: none; }
 .acat-btn:hover { background: rgba(0,230,180,.04); color: var(--text); }
 .acat-btn.active { background: rgba(0,230,180,.08); color: var(--acc); border-bottom: 2px solid var(--acc); }
- 
+
 .a-list { max-height: 520px; overflow-y: auto; padding: 4px 0; }
 .a-row { display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,.025); cursor: pointer; transition: background .1s; position: relative; }
 .a-row::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--acc2); transform: scaleY(0); transition: transform .12s; }
@@ -291,23 +291,23 @@ body {
 .a-cat { font-size: 10px; font-weight: 600; letter-spacing: 2px; color: var(--muted); margin-top: 2px; }
 .a-praf { padding: 12px 12px; font-family: 'Bebas Neue', sans-serif; font-size: 16px; color: var(--dim); white-space: nowrap; }
 .a-row.active .a-praf { color: var(--acc); }
- 
+
 .ammo-r { display: flex; flex-direction: column; gap: 16px; }
 .ammo-detail { display: none; flex-direction: column; gap: 16px; }
 .ammo-detail.show { display: flex; }
- 
+
 .a-hero { padding: 20px 24px; display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
 .a-hero-name { font-family: 'Bebas Neue', sans-serif; font-size: 38px; line-height: 1; color: var(--white); }
 .a-hero-cat { font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 3px; color: var(--acc2); margin-top: 4px; }
 .a-rate { background: rgba(0,201,255,.08); border: 1px solid rgba(0,201,255,.25); padding: 8px 14px; text-align: center; }
 .a-rate-v { font-family: 'Bebas Neue', sans-serif; font-size: 26px; line-height: 1; color: var(--acc2); }
 .a-rate-l { font-family: 'Share Tech Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--muted); margin-top: 2px; }
- 
+
 .a-presets { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
 .a-preset { padding: 8px 18px; background: rgba(0,201,255,.07); border: 1px solid rgba(0,201,255,.2); color: var(--acc2); font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px; cursor: pointer; transition: all .12s; }
 .a-preset:hover { background: rgba(0,201,255,.15); border-color: var(--acc2); }
 .a-preset.sel { background: var(--acc2); color: #000; border-color: var(--acc2); }
- 
+
 .a-res { padding: 22px 24px; }
 .a-res-top { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
 .a-res-box { background: rgba(0,0,0,.4); border: 1px solid var(--line); padding: 14px 18px; text-align: center; min-width: 100px; }
@@ -316,23 +316,23 @@ body {
 .a-res-val.green { color: var(--acc); }
 .a-res-val.cyan { color: var(--acc2); }
 .a-arrow { font-family: 'Share Tech Mono', monospace; font-size: 18px; color: var(--dim); }
- 
+
 .a-big { background: rgba(0,0,0,.5); border: 1px solid rgba(0,201,255,.2); padding: 22px; text-align: center; position: relative; overflow: hidden; margin-bottom: 14px; }
 .a-big::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 50% 100%,rgba(0,201,255,.06),transparent); }
- 
+
 .a-warn { background: rgba(232,180,0,.06); border: 1px solid rgba(232,180,0,.2); border-left: 3px solid #e8b400; padding: 12px 16px; font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 1.5px; color: #c89800; display: flex; align-items: center; gap: 10px; }
- 
+
 /* ── FOOTER ── */
 .footer { position: relative; z-index: 1; max-width: 1120px; margin: 0 auto; border-top: 1px solid var(--line); padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
 .footer span { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--dim); letter-spacing: 2px; }
 .footer b { color: var(--acc); }
- 
+
 /* ── SCROLLBAR ── */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--dim); }
 ::-webkit-scrollbar-thumb:hover { background: var(--acc); }
- 
+
 /* ── RESPONSIVE ── */
 @media(max-width:600px) {
   .nav-btn { padding: 12px 14px; font-size: 13px; }
@@ -344,16 +344,16 @@ body {
 </style>
 </head>
 <body>
- 
+
 <div class="bg-grid"></div>
 <div class="bg-glow"></div>
- 
+
 <div class="wrap">
- 
+
   <!-- HEADER -->
   <header class="hdr">
     <div>
-      <div class="hdr-tag">//  · TOOL SUITE · v3.0</div>
+      <div class="hdr-tag">// · TOOL SUITE · v3.0</div>
       <div class="hdr-title">SPT<br><span>TOOLS</span></div>
     </div>
     <div class="hdr-right">
@@ -361,20 +361,20 @@ body {
       <div class="hdr-status"><div class="dot"></div>SISTEM ACTIV</div>
     </div>
   </header>
- 
+
   <!-- NAV -->
   <nav class="nav">
     <button class="nav-btn active" onclick="goTo('arme',this)">🔫 ARME</button>
     <button class="nav-btn" onclick="goTo('bani',this)">💵 SPĂLARE BANI</button>
     <button class="nav-btn" onclick="goTo('munitie',this)">🔹 MUNIȚIE</button>
   </nav>
- 
+
   <!-- ════════════════════════
        ARME
   ════════════════════════ -->
   <div class="section active" id="sec-arme">
     <div class="two-col">
- 
+
       <div class="panel ammo-left" style="position:sticky;top:20px;">
         <div class="ph">
           <span class="ph-label">Selectează arma</span>
@@ -383,7 +383,7 @@ body {
         <div class="cat-strip" id="wCatStrip"></div>
         <div class="w-list" id="wList"></div>
       </div>
- 
+
       <div class="r-col">
         <div class="panel" id="wEmpty">
           <div class="empty">
@@ -422,21 +422,21 @@ body {
           </div>
         </div>
       </div>
- 
+
     </div>
   </div>
- 
+
   <!-- ════════════════════════
        SPALARE BANI
   ════════════════════════ -->
   <div class="section" id="sec-bani">
     <div class="launder-wrap">
- 
+
       <div class="warn-banner">
         <div class="warn-icon">⚠️</div>
         <div class="warn-txt">Minim de spălat: <b>$50.000</b><br>Introdui suma murdară → alegi taxa → primești suma curată</div>
       </div>
- 
+
       <div class="l-card">
         <div class="l-title">Suma de spălat</div>
         <div class="amt-field">
@@ -459,7 +459,7 @@ body {
         </div>
         <button class="btn-calc" onclick="lCalc()">CALCULEAZĂ</button>
       </div>
- 
+
       <div class="l-result" id="lResult">
         <div class="l-title">Rezultat spălare</div>
         <div class="res-row">
@@ -474,16 +474,16 @@ body {
         </div>
         <button class="btn-reset-l" onclick="lReset()">⟳ RESETEAZĂ CALCULUL</button>
       </div>
- 
+
     </div>
   </div>
- 
+
   <!-- ════════════════════════
        MUNITIE
   ════════════════════════ -->
   <div class="section" id="sec-munitie">
     <div class="ammo-grid">
- 
+
       <div class="panel ammo-left">
         <div class="ph">
           <span class="ph-label">Tip muniție</span>
@@ -492,7 +492,7 @@ body {
         <div class="acat-strip" id="aCatStrip"></div>
         <div class="a-list" id="aList"></div>
       </div>
- 
+
       <div class="ammo-r">
         <div class="panel" id="aEmpty">
           <div class="empty">
@@ -546,17 +546,17 @@ body {
           </div>
         </div>
       </div>
- 
+
     </div>
   </div>
- 
+
 </div><!-- /wrap -->
- 
+
 <footer class="footer">
   <span>© 2026 &nbsp;<b>SPT CATALIN</b></span>
   <span>INSTAGRAM: SPT.CATALIN</span>
 </footer>
- 
+
 <script>
 // ════════════════════════════════
 //  NAV
@@ -567,7 +567,7 @@ function goTo(id, btn) {
   document.getElementById('sec-' + id).classList.add('active');
   btn.classList.add('active');
 }
- 
+
 // ════════════════════════════════
 //  ARME DATA
 // ════════════════════════════════
@@ -612,10 +612,10 @@ const MAT_META = {
   teava:{label:'Țeavă Metalică',unit:'bucăți'},
   lemn:{label:'Lemn',unit:'bucăți'},
 };
- 
+
 let selW = null, selAtt = new Set(), wCat = 'Toate';
 const W_CATS = ['Toate',...new Set(WEAPONS.map(w=>w.cat))];
- 
+
 function wInit() {
   const strip = document.getElementById('wCatStrip');
   W_CATS.forEach(c => {
@@ -635,13 +635,13 @@ function wInit() {
   });
   document.getElementById('wCount').textContent = WEAPONS.length+' / '+WEAPONS.length;
 }
- 
+
 function wFilter() {
   let v=0;
   document.querySelectorAll('.w-row').forEach(r=>{const ok=wCat==='Toate'||r.dataset.cat===wCat;r.classList.toggle('hidden',!ok);if(ok)v++;});
   document.getElementById('wCount').textContent=v+' / '+WEAPONS.length;
 }
- 
+
 function wSel(id) {
   selW=id; selAtt=new Set();
   document.querySelectorAll('.w-row').forEach(r=>r.classList.toggle('active',r.id==='wr_'+id));
@@ -665,7 +665,7 @@ function wSel(id) {
   document.getElementById('matsWrap').classList.add('show');
   wCalc();
 }
- 
+
 function wCalc() {
   if(!selW) return;
   const qty=Math.max(1,parseInt(document.getElementById('wQty').value)||1);
@@ -684,13 +684,13 @@ function wCalc() {
     grid.appendChild(d);
   });
 }
- 
+
 function wQty(d) {
   const inp=document.getElementById('wQty');
   inp.value=Math.max(1,Math.min(999,(parseInt(inp.value)||1)+d));
   wCalc();
 }
- 
+
 function wReset() {
   selW=null; selAtt=new Set();
   document.querySelectorAll('.w-row').forEach(r=>r.classList.remove('active'));
@@ -705,13 +705,13 @@ function wReset() {
   document.getElementById('attGrid').innerHTML='';
   document.getElementById('matsGrid').innerHTML='';
 }
- 
+
 // ════════════════════════════════
 //  SPALARE BANI
 // ════════════════════════════════
 let selTaxa = null;
 function fmtD(n){ return '$'+Math.round(n).toLocaleString('ro-RO'); }
- 
+
 function pickTaxa(p) {
   selTaxa=p;
   document.getElementById('t5').classList.toggle('active',p===5);
@@ -756,7 +756,7 @@ function lReset() {
   document.getElementById('lHint').style.color='';
   document.getElementById('lResult').classList.remove('show');
 }
- 
+
 // ════════════════════════════════
 //  MUNITIE DATA
 // ════════════════════════════════
@@ -787,7 +787,7 @@ const AMMO = [
 ];
 const A_CATS = ['Toate',...new Set(AMMO.map(a=>a.cat))];
 let selA=null, aCat='Toate';
- 
+
 function aInit() {
   const strip=document.getElementById('aCatStrip');
   A_CATS.forEach(c=>{
@@ -807,13 +807,13 @@ function aInit() {
   });
   document.getElementById('aCount').textContent=AMMO.length+' / '+AMMO.length;
 }
- 
+
 function aFilter() {
   let v=0;
   document.querySelectorAll('.a-row').forEach(r=>{const ok=aCat==='Toate'||r.dataset.cat===aCat;r.classList.toggle('hidden',!ok);if(ok)v++;});
   document.getElementById('aCount').textContent=v+' / '+AMMO.length;
 }
- 
+
 function aSel(id) {
   selA=id;
   document.querySelectorAll('.a-row').forEach(r=>r.classList.toggle('active',r.id==='ar_'+id));
@@ -826,7 +826,7 @@ function aSel(id) {
   document.getElementById('aDetail').classList.add('show');
   aCalc();
 }
- 
+
 function aSetQty(v) {
   document.getElementById('aQty').value=v;
   document.querySelectorAll('.a-preset').forEach(b=>b.classList.toggle('sel',parseInt(b.textContent)===v));
@@ -839,7 +839,7 @@ function aQty(d) {
   document.querySelectorAll('.a-preset').forEach(b=>b.classList.toggle('sel',parseInt(b.textContent)===v));
   aCalc();
 }
- 
+
 function aCalc() {
   if(!selA) return;
   const a=AMMO.find(x=>x.id===selA);
@@ -858,7 +858,7 @@ function aCalc() {
     document.getElementById('aWarnTxt').textContent='Ultimul lot are doar '+rest+' muniții (din 10). Se consumă tot '+a.praf+' Praf de Pușcă per lot.';
   } else { w.style.display='none'; }
 }
- 
+
 function aReset() {
   selA=null;
   document.querySelectorAll('.a-row').forEach(r=>r.classList.remove('active'));
@@ -871,7 +871,7 @@ function aReset() {
   document.getElementById('aDetail').classList.remove('show');
   document.getElementById('aWarn').style.display='none';
 }
- 
+
 // ── INIT ──
 wInit();
 aInit();

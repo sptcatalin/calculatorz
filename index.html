@@ -4,635 +4,547 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SPT TOOLS — SpartanRP</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Barlow+Condensed:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg0:   #040c0c;
-  --bg1:   #071212;
-  --panel: #080f10;
-  --line:  rgba(0,230,180,0.1);
-  --acc:   #00e6b4;
-  --acc2:  #00c9ff;
-  --acc3:  #00ff88;
-  --dim:   #1a3530;
-  --muted: #2e5550;
-  --text:  #b0ddd8;
-  --white: #e0f5f2;
-  --danger:#e84040;
-  --gold:  #00e6b4;
+  --bg:     #040c0c;
+  --panel:  #080f10;
+  --line:   rgba(0,230,180,0.1);
+  --acc:    #00e6b4;
+  --acc2:   #00c9ff;
+  --acc3:   #00ff88;
+  --dim:    #1a3530;
+  --muted:  #2e5550;
+  --text:   #b0ddd8;
+  --white:  #e0f5f2;
+  --danger: #e84040;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Barlow Condensed', sans-serif;
+  min-height: 100vh;
 }
 
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
-body{
-  background:var(--bg0);
-  color:var(--text);
-  font-family:'Barlow Condensed',sans-serif;
-  min-height:100vh;
-  overflow-x:hidden;
-}
-
-/* noise */
-body::before{
-  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-}
-/* scanlines */
-body::after{
-  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.05) 2px,rgba(0,0,0,0.05) 4px);
-}
-
-.bg-pattern{
-  position:fixed;inset:0;z-index:0;pointer-events:none;
+/* ── BG EFFECTS ── */
+.bg-grid {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
   background-image:
-    linear-gradient(135deg,rgba(0,230,180,0.025) 1px,transparent 1px),
-    linear-gradient(45deg,rgba(0,201,255,0.015) 1px,transparent 1px);
-  background-size:60px 60px,30px 30px;
+    linear-gradient(rgba(0,230,180,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,230,180,0.015) 1px, transparent 1px);
+  background-size: 50px 50px;
 }
-.bg-glow{
-  position:fixed;inset:0;z-index:0;pointer-events:none;
+.bg-glow {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
   background:
-    radial-gradient(ellipse 70% 50% at 10% 0%,rgba(0,230,180,0.06) 0%,transparent 60%),
-    radial-gradient(ellipse 50% 40% at 90% 90%,rgba(0,201,255,0.05) 0%,transparent 60%);
+    radial-gradient(ellipse 60% 50% at 0% 0%, rgba(0,230,180,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 100% 100%, rgba(0,201,255,0.06) 0%, transparent 60%);
 }
 
-/* ─ LAYOUT ─ */
-.wrap{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:0 24px 80px;}
+/* ── LAYOUT ── */
+.wrap {
+  position: relative; z-index: 1;
+  max-width: 1120px; margin: 0 auto;
+  padding: 0 24px 80px;
+}
 
-/* ─ HEADER ─ */
-.hdr{
-  display:flex;align-items:flex-end;justify-content:space-between;
-  padding:32px 0 20px;border-bottom:1px solid var(--line);
-  margin-bottom:0;flex-wrap:wrap;gap:16px;
+/* ── HEADER ── */
+.hdr {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  padding: 30px 0 18px; border-bottom: 1px solid var(--line);
+  flex-wrap: wrap; gap: 14px;
 }
-.hdr-tag{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--acc2);letter-spacing:4px;text-transform:uppercase;margin-bottom:6px;}
-.hdr-title{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:clamp(42px,8vw,72px);line-height:.88;color:var(--white);letter-spacing:2px;
+.hdr-tag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px; color: var(--acc2); letter-spacing: 4px; margin-bottom: 6px;
 }
-.hdr-title span{
-  background:linear-gradient(90deg,var(--acc),var(--acc2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+.hdr-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(40px, 8vw, 70px); line-height: .88;
+  color: var(--white); letter-spacing: 2px;
 }
-.hdr-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;}
-.hdr-version{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim);letter-spacing:2px;}
-.hdr-status{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:2px;color:var(--acc);}
-.status-dot{width:8px;height:8px;border-radius:50%;background:var(--acc);box-shadow:0 0 10px var(--acc);animation:pulse-dot 2s ease-in-out infinite;}
-@keyframes pulse-dot{0%,100%{opacity:1;box-shadow:0 0 12px var(--acc);}50%{opacity:.3;box-shadow:0 0 3px var(--acc);}}
+.hdr-title span {
+  background: linear-gradient(90deg, var(--acc), var(--acc2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hdr-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.hdr-ver { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--dim); letter-spacing: 2px; }
+.hdr-status { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 2px; color: var(--acc); }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--acc); box-shadow: 0 0 10px var(--acc); animation: blink 2s infinite; }
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:.3;} }
 
-/* ─ NAV ─ */
-.main-nav{
-  display:flex;gap:0;margin-top:0;
-  border-bottom:1px solid var(--line);
+/* ── NAV ── */
+.nav {
+  display: flex; border-bottom: 1px solid var(--line);
 }
-.nav-btn{
-  padding:14px 32px;
-  background:none;border:none;
-  border-bottom:3px solid transparent;
-  color:var(--muted);
-  font-family:'Barlow Condensed',sans-serif;
-  font-size:15px;font-weight:800;letter-spacing:2px;
-  cursor:pointer;transition:all .15s;text-transform:uppercase;
-  white-space:nowrap;
+.nav-btn {
+  padding: 14px 30px; background: none; border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--muted);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 15px; font-weight: 800; letter-spacing: 2px;
+  cursor: pointer; transition: all .15s; text-transform: uppercase;
+  white-space: nowrap;
 }
-.nav-btn:hover{color:var(--text);background:rgba(0,230,180,0.03);}
-.nav-btn.active{
-  color:var(--acc);
-  border-bottom-color:var(--acc);
-  background:rgba(0,230,180,0.04);
-}
-.nav-btn .nb-ic{margin-right:8px;font-size:16px;}
+.nav-btn:hover { color: var(--text); background: rgba(0,230,180,.03); }
+.nav-btn.active { color: var(--acc); border-bottom-color: var(--acc); background: rgba(0,230,180,.04); }
 
-/* ─ SECTIONS ─ */
-.section{display:none;padding-top:28px;}
-.section.active{display:block;animation:fadeIn .2s ease;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:none;}}
+/* ── SECTIONS ── */
+.section { display: none; padding-top: 28px; }
+.section.active { display: block; animation: fi .2s ease; }
+@keyframes fi { from{opacity:0;transform:translateY(5px);} to{opacity:1;transform:none;} }
 
-/* ─ PANEL ─ */
-.panel{
-  background:var(--panel);border:1px solid var(--line);
-  border-radius:2px;position:relative;overflow:hidden;
+/* ── PANEL ── */
+.panel {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 2px;
+  position: relative; overflow: hidden;
 }
-.panel::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,transparent,var(--acc),var(--acc2),transparent);
-  opacity:.35;
+.panel::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--acc), var(--acc2), transparent); opacity: .3;
 }
-.panel-hdr{padding:14px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
-.panel-label{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;}
-.panel-num{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim);}
+.ph { padding: 14px 20px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; }
+.ph-label { font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; }
+.ph-num { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--dim); }
+.mono { font-family: 'Share Tech Mono', monospace; }
+.bebas { font-family: 'Bebas Neue', sans-serif; }
 
-/* ─ WEAPON GRID ─ */
-.main-grid{display:grid;grid-template-columns:340px 1fr;gap:20px;align-items:start;}
-@media(max-width:840px){.main-grid{grid-template-columns:1fr;}}
+/* ══════════════════════════════════════
+   ARME
+══════════════════════════════════════ */
+.two-col { display: grid; grid-template-columns: 320px 1fr; gap: 20px; align-items: start; }
+@media(max-width:840px){ .two-col { grid-template-columns: 1fr; } }
 
 /* category strip */
-.cat-strip{display:flex;border-bottom:1px solid var(--line);}
-.cat-btn{
-  flex:1;padding:10px 6px;background:none;border:none;border-right:1px solid var(--line);
-  color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;
-  cursor:pointer;transition:all .12s;text-transform:uppercase;
+.cat-strip { display: flex; border-bottom: 1px solid var(--line); }
+.cat-btn {
+  flex: 1; padding: 10px 6px; background: none;
+  border: none; border-right: 1px solid var(--line);
+  color: var(--muted);
+  font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 1px;
+  cursor: pointer; transition: all .12s; text-transform: uppercase;
 }
-.cat-btn:last-child{border-right:none;}
-.cat-btn:hover{background:rgba(0,230,180,0.04);color:var(--text);}
-.cat-btn.active{background:rgba(0,230,180,0.08);color:var(--acc);border-bottom:2px solid var(--acc);}
+.cat-btn:last-child { border-right: none; }
+.cat-btn:hover { background: rgba(0,230,180,.04); color: var(--text); }
+.cat-btn.active { background: rgba(0,230,180,.08); color: var(--acc); border-bottom: 2px solid var(--acc); }
 
 /* weapon list */
-.weapon-list{padding:4px 0;max-height:560px;overflow-y:auto;}
-.weapon-row{
-  display:flex;align-items:center;border-bottom:1px solid rgba(255,255,255,.025);
-  cursor:pointer;transition:background .1s;position:relative;
+.w-list { max-height: 520px; overflow-y: auto; padding: 4px 0; }
+.w-row {
+  display: flex; align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,.025);
+  cursor: pointer; transition: background .1s; position: relative;
 }
-.weapon-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--acc);transform:scaleY(0);transition:transform .12s;}
-.weapon-row:hover{background:rgba(0,230,180,.035);}
-.weapon-row.active{background:rgba(0,230,180,.065);}
-.weapon-row.active::before{transform:scaleY(1);}
-.weapon-row.hidden{display:none;}
-.wr-code{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dim);padding:13px 12px;min-width:46px;text-align:center;border-right:1px solid var(--line);}
-.weapon-row.active .wr-code{color:var(--acc2);}
-.wr-info{padding:13px 16px;flex:1;}
-.wr-name{font-size:15px;font-weight:800;letter-spacing:.5px;color:var(--text);text-transform:uppercase;line-height:1;}
-.weapon-row.active .wr-name{color:var(--acc);}
-.wr-cat{font-size:11px;font-weight:600;letter-spacing:2px;color:var(--muted);margin-top:3px;}
-.wr-arrow{padding:13px 14px;color:var(--dim);font-size:16px;transition:color .12s;}
-.weapon-row:hover .wr-arrow,.weapon-row.active .wr-arrow{color:var(--acc);}
+.w-row::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--acc); transform: scaleY(0); transition: transform .12s; }
+.w-row:hover { background: rgba(0,230,180,.035); }
+.w-row.active { background: rgba(0,230,180,.065); }
+.w-row.active::before { transform: scaleY(1); }
+.w-row.hidden { display: none; }
+.w-code { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--dim); padding: 13px 10px; min-width: 44px; text-align: center; border-right: 1px solid var(--line); }
+.w-row.active .w-code { color: var(--acc2); }
+.w-info { padding: 13px 14px; flex: 1; }
+.w-name { font-size: 14px; font-weight: 800; color: var(--text); text-transform: uppercase; line-height: 1; }
+.w-row.active .w-name { color: var(--acc); }
+.w-cat { font-size: 10px; font-weight: 600; letter-spacing: 2px; color: var(--muted); margin-top: 2px; }
+.w-arr { padding: 13px 12px; color: var(--dim); font-size: 16px; transition: color .12s; }
+.w-row:hover .w-arr, .w-row.active .w-arr { color: var(--acc); }
 
 /* right col */
-.right-col{display:flex;flex-direction:column;gap:16px;}
-.detail-panel{display:none;flex-direction:column;gap:16px;}
-.detail-panel.show{display:flex;}
+.r-col { display: flex; flex-direction: column; gap: 16px; }
+.d-panel { display: none; flex-direction: column; gap: 16px; }
+.d-panel.show { display: flex; }
 
 /* empty */
-.empty-state{padding:80px 40px;text-align:center;}
-.empty-icon{font-size:44px;margin-bottom:18px;filter:grayscale(1) opacity(.2);}
-.empty-text{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--dim);text-transform:uppercase;line-height:2.2;}
+.empty { padding: 80px 40px; text-align: center; }
+.empty-icon { font-size: 42px; margin-bottom: 16px; filter: grayscale(1) opacity(.2); }
+.empty-txt { font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 3px; color: var(--dim); text-transform: uppercase; line-height: 2.2; }
 
 /* hero */
-.weapon-hero{padding:22px 24px;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px;}
-.wh-name{font-family:'Bebas Neue',sans-serif;font-size:48px;line-height:1;color:var(--white);letter-spacing:1px;}
-.wh-cat{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--acc2);margin-top:5px;}
-.wh-tag{display:inline-block;background:rgba(0,230,180,.08);border:1px solid rgba(0,230,180,.28);color:var(--acc);font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;padding:5px 14px;border-radius:1px;}
+.w-hero { padding: 20px 24px; display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+.w-hero-name { font-family: 'Bebas Neue', sans-serif; font-size: 46px; line-height: 1; color: var(--white); }
+.w-hero-cat { font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 3px; color: var(--acc2); margin-top: 4px; }
+.w-badge { display: inline-block; background: rgba(0,230,180,.08); border: 1px solid rgba(0,230,180,.28); color: var(--acc); font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 2px; padding: 5px 14px; }
 
 /* controls */
-.controls-pad{padding:20px 24px;}
-.ctrl-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
-.ctrl-label{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--muted);white-space:nowrap;}
-.qty-control{display:flex;border:1px solid var(--line);}
-.qty-btn{width:38px;height:38px;background:rgba(255,255,255,.025);border:none;color:var(--acc);font-size:22px;font-weight:900;cursor:pointer;transition:background .1s;display:flex;align-items:center;justify-content:center;}
-.qty-btn:hover{background:rgba(0,230,180,.1);}
-.qty-input{width:74px;height:38px;background:rgba(0,0,0,.3);border:none;border-left:1px solid var(--line);border-right:1px solid var(--line);color:var(--white);font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;text-align:center;}
-.qty-input:focus{outline:none;background:rgba(0,230,180,.04);}
-
-.btn-reset{margin-left:auto;padding:9px 18px;background:rgba(232,64,64,.06);border:1px solid rgba(232,64,64,.22);color:var(--danger);font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;cursor:pointer;transition:all .12s;}
-.btn-reset:hover{background:rgba(232,64,64,.15);border-color:var(--danger);}
+.cpad { padding: 20px 24px; }
+.crow { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.clbl { font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 3px; color: var(--muted); white-space: nowrap; }
+.qc { display: flex; border: 1px solid var(--line); }
+.qbtn { width: 38px; height: 38px; background: rgba(255,255,255,.025); border: none; color: var(--acc); font-size: 22px; font-weight: 900; cursor: pointer; transition: background .1s; display: flex; align-items: center; justify-content: center; }
+.qbtn:hover { background: rgba(0,230,180,.1); }
+.qinput { width: 72px; height: 38px; background: rgba(0,0,0,.3); border: none; border-left: 1px solid var(--line); border-right: 1px solid var(--line); color: var(--white); font-family: 'Bebas Neue', sans-serif; font-size: 26px; text-align: center; }
+.qinput:focus { outline: none; background: rgba(0,230,180,.04); }
+.btn-reset { margin-left: auto; padding: 9px 18px; background: rgba(232,64,64,.06); border: 1px solid rgba(232,64,64,.22); color: var(--danger); font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 2px; cursor: pointer; transition: all .12s; }
+.btn-reset:hover { background: rgba(232,64,64,.15); border-color: var(--danger); }
 
 /* attachments */
-.attach-wrap{padding:0 24px 20px;display:none;}
-.section-ttl{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px;}
-.section-ttl::after{content:'';flex:1;height:1px;background:var(--line);}
-.attach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px;}
-.attach-item{padding:10px 14px;background:rgba(0,0,0,.28);border:1px solid var(--line);cursor:pointer;transition:all .1s;display:flex;align-items:center;gap:10px;border-radius:1px;}
-.attach-item:hover{border-color:rgba(0,230,180,.22);background:rgba(0,230,180,.035);}
-.attach-item.active{border-color:var(--acc);background:rgba(0,230,180,.07);}
-.a-check{width:16px;height:16px;flex-shrink:0;border:1px solid var(--dim);border-radius:1px;display:flex;align-items:center;justify-content:center;font-size:10px;color:transparent;transition:all .1s;}
-.attach-item.active .a-check{background:var(--acc);border-color:var(--acc);color:#000;}
-.a-name{font-size:13px;font-weight:700;letter-spacing:.3px;color:var(--muted);text-transform:uppercase;line-height:1.2;}
-.attach-item.active .a-name{color:var(--text);}
+.att-wrap { padding: 0 24px 20px; display: none; }
+.sec-ttl { font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+.sec-ttl::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+.att-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px,1fr)); gap: 8px; }
+.att-item { padding: 10px 14px; background: rgba(0,0,0,.28); border: 1px solid var(--line); cursor: pointer; transition: all .1s; display: flex; align-items: center; gap: 10px; }
+.att-item:hover { border-color: rgba(0,230,180,.22); background: rgba(0,230,180,.035); }
+.att-item.active { border-color: var(--acc); background: rgba(0,230,180,.07); }
+.att-chk { width: 16px; height: 16px; flex-shrink: 0; border: 1px solid var(--dim); display: flex; align-items: center; justify-content: center; font-size: 10px; color: transparent; transition: all .1s; }
+.att-item.active .att-chk { background: var(--acc); border-color: var(--acc); color: #000; }
+.att-nm { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; line-height: 1.2; }
+.att-item.active .att-nm { color: var(--text); }
 
 /* materials */
-.mats-wrap{padding:22px 24px;display:none;}
-.mats-wrap.show{display:block;}
-.mats-head{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
-.mats-lbl{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--muted);}
-.mats-div{flex:1;height:1px;background:var(--line);}
-.mats-info{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--acc2);letter-spacing:1px;white-space:nowrap;}
-.mats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:10px;}
-.mat-card{background:rgba(0,0,0,.38);border:1px solid rgba(255,255,255,.04);padding:14px 16px;display:flex;align-items:center;gap:14px;border-radius:1px;animation:mat-in .18s ease both;}
-@keyframes mat-in{from{opacity:0;transform:translateX(-6px);}to{opacity:1;transform:none;}}
+.mats-wrap { padding: 22px 24px; display: none; }
+.mats-wrap.show { display: block; }
+.mats-hd { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+.mats-lbl { font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 3px; color: var(--muted); }
+.mats-div { flex: 1; height: 1px; background: var(--line); }
+.mats-inf { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--acc2); letter-spacing: 1px; white-space: nowrap; }
+.mats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px,1fr)); gap: 10px; }
+.mat-card { background: rgba(0,0,0,.38); border: 1px solid rgba(255,255,255,.04); padding: 14px 16px; display: flex; align-items: center; gap: 14px; animation: si .18s ease both; }
+@keyframes si { from{opacity:0;transform:translateX(-6px);} to{opacity:1;transform:none;} }
 .mat-card:nth-child(1){animation-delay:.00s;border-left:3px solid var(--acc);}
 .mat-card:nth-child(2){animation-delay:.04s;border-left:3px solid var(--acc2);}
 .mat-card:nth-child(3){animation-delay:.08s;border-left:3px solid #00ff88;}
 .mat-card:nth-child(4){animation-delay:.12s;border-left:3px solid #40e8d0;}
 .mat-card:nth-child(5){animation-delay:.16s;border-left:3px solid #00a8ff;}
 .mat-card:nth-child(6){animation-delay:.20s;border-left:3px solid #00e690;}
-.mat-qty{font-family:'Bebas Neue',sans-serif;font-size:40px;line-height:1;color:var(--white);min-width:54px;text-align:center;}
-.mat-name{font-size:14px;font-weight:800;letter-spacing:.5px;color:var(--text);text-transform:uppercase;line-height:1;}
-.mat-unit{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;margin-top:3px;}
+.mat-qty { font-family: 'Bebas Neue', sans-serif; font-size: 40px; line-height: 1; color: var(--white); min-width: 52px; text-align: center; }
+.mat-name { font-size: 14px; font-weight: 800; color: var(--text); text-transform: uppercase; line-height: 1; }
+.mat-unit { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; margin-top: 3px; }
 
-/* ═══════════════════════════════════════
+/* ══════════════════════════════════════
    SPALARE BANI
-═══════════════════════════════════════ */
-.launder-wrap{
-  max-width:680px;margin:0 auto;
-  display:flex;flex-direction:column;gap:20px;
+══════════════════════════════════════ */
+.launder-wrap { max-width: 660px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+.warn-banner { display: flex; align-items: center; gap: 16px; background: rgba(0,230,180,.04); border: 1px solid rgba(0,230,180,.15); border-left: 4px solid var(--acc); padding: 16px 20px; }
+.warn-icon { font-size: 26px; flex-shrink: 0; }
+.warn-txt { font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 1.5px; color: var(--muted); line-height: 1.8; text-transform: uppercase; }
+.warn-txt b { color: var(--acc); }
+.l-card { background: var(--panel); border: 1px solid var(--line); position: relative; overflow: hidden; padding: 26px; }
+.l-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg,transparent,var(--acc),var(--acc2),transparent); opacity: .3; }
+.l-title { font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+.l-title::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+.amt-field { display: flex; align-items: center; background: rgba(0,0,0,.4); border: 1px solid var(--line); overflow: hidden; margin-bottom: 6px; transition: border-color .15s; }
+.amt-field:focus-within { border-color: rgba(0,230,180,.4); }
+.amt-prefix { padding: 0 18px; font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: var(--acc); background: rgba(0,230,180,.06); border-right: 1px solid var(--line); height: 58px; display: flex; align-items: center; }
+.amt-input { flex: 1; padding: 0 18px; height: 58px; background: none; border: none; color: var(--white); font-family: 'Bebas Neue', sans-serif; font-size: 32px; }
+.amt-input:focus { outline: none; }
+.amt-input::placeholder { color: var(--dim); }
+.amt-hint { font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--dim); margin-bottom: 22px; }
+.amt-hint b { color: var(--acc2); }
+.taxa-lbl { font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 3px; color: var(--muted); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+.taxa-lbl::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+.taxa-row { display: flex; gap: 12px; margin-bottom: 26px; }
+.taxa-btn { flex: 1; padding: 16px 20px; background: rgba(0,0,0,.3); border: 2px solid var(--line); cursor: pointer; transition: all .15s; text-align: center; position: relative; overflow: hidden; }
+.taxa-btn:hover { border-color: rgba(0,230,180,.25); background: rgba(0,230,180,.04); }
+.taxa-btn.active { border-color: var(--acc); background: rgba(0,230,180,.09); }
+.taxa-pct { font-family: 'Bebas Neue', sans-serif; font-size: 40px; line-height: 1; color: var(--text); transition: color .15s; }
+.taxa-btn.active .taxa-pct { color: var(--acc); }
+.taxa-nm { font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--muted); margin-top: 4px; }
+.taxa-btn.active .taxa-nm { color: var(--acc2); }
+.taxa-vl { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--dim); margin-top: 6px; transition: color .15s; }
+.taxa-btn.active .taxa-vl { color: var(--acc2); }
+.btn-calc { width: 100%; padding: 18px; background: linear-gradient(135deg,rgba(0,230,180,.18),rgba(0,201,255,.12)); border: 1px solid rgba(0,230,180,.35); color: var(--acc); font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 3px; cursor: pointer; transition: all .15s; }
+.btn-calc:hover { background: linear-gradient(135deg,rgba(0,230,180,.25),rgba(0,201,255,.18)); border-color: var(--acc); }
+.l-result { display: none; background: var(--panel); border: 1px solid var(--line); position: relative; overflow: hidden; padding: 26px; }
+.l-result::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg,transparent,var(--acc3),var(--acc),transparent); opacity: .5; }
+.l-result.show { display: block; animation: fi .25s ease; }
+.res-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+.res-box { background: rgba(0,0,0,.35); border: 1px solid var(--line); padding: 16px; text-align: center; }
+.res-lbl { font-family: 'Share Tech Mono', monospace; font-size: 9px; letter-spacing: 2.5px; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
+.res-val { font-family: 'Bebas Neue', sans-serif; font-size: 26px; line-height: 1; color: var(--text); }
+.res-box.red .res-val { color: var(--danger); }
+.res-box.cyan .res-val { color: var(--acc2); }
+.big-res { background: rgba(0,0,0,.5); border: 1px solid rgba(0,230,180,.2); padding: 22px; text-align: center; position: relative; overflow: hidden; }
+.big-res::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 50% 100%,rgba(0,230,180,.07),transparent); }
+.big-lbl { font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 4px; color: var(--muted); text-transform: uppercase; margin-bottom: 10px; }
+.big-val { font-family: 'Bebas Neue', sans-serif; font-size: clamp(38px,8vw,66px); line-height: 1; background: linear-gradient(90deg,var(--acc),var(--acc2),var(--acc3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.big-sub { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--dim); letter-spacing: 2px; margin-top: 8px; }
+.btn-reset-l { width: 100%; margin-top: 16px; padding: 12px; background: rgba(232,64,64,.06); border: 1px solid rgba(232,64,64,.22); color: var(--danger); font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 2px; cursor: pointer; transition: all .12s; }
+.btn-reset-l:hover { background: rgba(232,64,64,.14); border-color: var(--danger); }
+
+/* ══════════════════════════════════════
+   MUNITIE
+══════════════════════════════════════ */
+.ammo-grid { display: grid; grid-template-columns: 320px 1fr; gap: 20px; align-items: start; }
+@media(max-width:840px){ .ammo-grid { grid-template-columns: 1fr; } }
+.ammo-left { position: sticky; top: 20px; }
+
+.acat-strip { display: flex; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
+.acat-btn { flex: 1; min-width: 55px; padding: 8px 6px; background: none; border: none; border-right: 1px solid var(--line); color: var(--muted); font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 1px; cursor: pointer; transition: all .12s; text-transform: uppercase; text-align: center; }
+.acat-btn:last-child { border-right: none; }
+.acat-btn:hover { background: rgba(0,230,180,.04); color: var(--text); }
+.acat-btn.active { background: rgba(0,230,180,.08); color: var(--acc); border-bottom: 2px solid var(--acc); }
+
+.a-list { max-height: 520px; overflow-y: auto; padding: 4px 0; }
+.a-row { display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,.025); cursor: pointer; transition: background .1s; position: relative; }
+.a-row::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--acc2); transform: scaleY(0); transition: transform .12s; }
+.a-row:hover { background: rgba(0,201,255,.03); }
+.a-row.active { background: rgba(0,201,255,.07); }
+.a-row.active::before { transform: scaleY(1); }
+.a-row.hidden { display: none; }
+.a-code { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--dim); padding: 12px 10px; min-width: 36px; text-align: center; border-right: 1px solid var(--line); }
+.a-row.active .a-code { color: var(--acc2); }
+.a-info { padding: 12px 14px; flex: 1; }
+.a-name { font-size: 13px; font-weight: 800; color: var(--text); text-transform: uppercase; line-height: 1; }
+.a-row.active .a-name { color: var(--acc2); }
+.a-cat { font-size: 10px; font-weight: 600; letter-spacing: 2px; color: var(--muted); margin-top: 2px; }
+.a-praf { padding: 12px 12px; font-family: 'Bebas Neue', sans-serif; font-size: 16px; color: var(--dim); white-space: nowrap; }
+.a-row.active .a-praf { color: var(--acc); }
+
+.ammo-r { display: flex; flex-direction: column; gap: 16px; }
+.ammo-detail { display: none; flex-direction: column; gap: 16px; }
+.ammo-detail.show { display: flex; }
+
+.a-hero { padding: 20px 24px; display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+.a-hero-name { font-family: 'Bebas Neue', sans-serif; font-size: 38px; line-height: 1; color: var(--white); }
+.a-hero-cat { font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 3px; color: var(--acc2); margin-top: 4px; }
+.a-rate { background: rgba(0,201,255,.08); border: 1px solid rgba(0,201,255,.25); padding: 8px 14px; text-align: center; }
+.a-rate-v { font-family: 'Bebas Neue', sans-serif; font-size: 26px; line-height: 1; color: var(--acc2); }
+.a-rate-l { font-family: 'Share Tech Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--muted); margin-top: 2px; }
+
+.a-presets { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.a-preset { padding: 8px 18px; background: rgba(0,201,255,.07); border: 1px solid rgba(0,201,255,.2); color: var(--acc2); font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px; cursor: pointer; transition: all .12s; }
+.a-preset:hover { background: rgba(0,201,255,.15); border-color: var(--acc2); }
+.a-preset.sel { background: var(--acc2); color: #000; border-color: var(--acc2); }
+
+.a-res { padding: 22px 24px; }
+.a-res-top { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.a-res-box { background: rgba(0,0,0,.4); border: 1px solid var(--line); padding: 14px 18px; text-align: center; min-width: 100px; }
+.a-res-lbl { font-family: 'Share Tech Mono', monospace; font-size: 9px; letter-spacing: 2.5px; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
+.a-res-val { font-family: 'Bebas Neue', sans-serif; font-size: 30px; line-height: 1; color: var(--text); }
+.a-res-val.green { color: var(--acc); }
+.a-res-val.cyan { color: var(--acc2); }
+.a-arrow { font-family: 'Share Tech Mono', monospace; font-size: 18px; color: var(--dim); }
+
+.a-big { background: rgba(0,0,0,.5); border: 1px solid rgba(0,201,255,.2); padding: 22px; text-align: center; position: relative; overflow: hidden; margin-bottom: 14px; }
+.a-big::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 50% 100%,rgba(0,201,255,.06),transparent); }
+
+.a-warn { background: rgba(232,180,0,.06); border: 1px solid rgba(232,180,0,.2); border-left: 3px solid #e8b400; padding: 12px 16px; font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 1.5px; color: #c89800; display: flex; align-items: center; gap: 10px; }
+
+/* ── FOOTER ── */
+.footer { position: relative; z-index: 1; max-width: 1120px; margin: 0 auto; border-top: 1px solid var(--line); padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+.footer span { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--dim); letter-spacing: 2px; }
+.footer b { color: var(--acc); }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--dim); }
+::-webkit-scrollbar-thumb:hover { background: var(--acc); }
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px) {
+  .nav-btn { padding: 12px 14px; font-size: 13px; }
+  .res-row { grid-template-columns: 1fr; }
+  .taxa-row { flex-direction: column; }
+  .mats-grid { grid-template-columns: 1fr 1fr; }
+  .a-res-top { flex-direction: column; }
 }
-
-/* warning banner */
-.warn-banner{
-  display:flex;align-items:center;gap:16px;
-  background:rgba(0,230,180,.04);
-  border:1px solid rgba(0,230,180,.15);
-  border-left:4px solid var(--acc);
-  padding:16px 20px;
-  border-radius:2px;
-}
-.warn-icon{font-size:28px;flex-shrink:0;}
-.warn-text{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:1.5px;color:var(--muted);line-height:1.8;text-transform:uppercase;}
-.warn-text b{color:var(--acc);}
-
-/* input card */
-.launder-card{
-  background:var(--panel);border:1px solid var(--line);
-  border-radius:2px;padding:28px;position:relative;overflow:hidden;
-}
-.launder-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--acc),var(--acc2),transparent);opacity:.35;}
-.lc-title{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:10px;}
-.lc-title::after{content:'';flex:1;height:1px;background:var(--line);}
-
-/* amount input */
-.amount-field{
-  display:flex;align-items:center;
-  background:rgba(0,0,0,.4);
-  border:1px solid var(--line);
-  border-radius:2px;
-  margin-bottom:6px;
-  transition:border-color .15s;
-  overflow:hidden;
-}
-.amount-field:focus-within{border-color:rgba(0,230,180,.4);}
-.amount-prefix{
-  padding:0 18px;
-  font-family:'Bebas Neue',sans-serif;
-  font-size:28px;color:var(--acc);
-  background:rgba(0,230,180,.06);
-  border-right:1px solid var(--line);
-  height:60px;display:flex;align-items:center;
-}
-.amount-input{
-  flex:1;padding:0 20px;height:60px;
-  background:none;border:none;
-  color:var(--white);
-  font-family:'Bebas Neue',sans-serif;
-  font-size:34px;letter-spacing:1px;
-}
-.amount-input:focus{outline:none;}
-.amount-input::placeholder{color:var(--dim);}
-.amount-hint{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--dim);margin-bottom:24px;}
-.amount-hint b{color:var(--acc2);}
-
-/* taxa buttons */
-.taxa-label{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px;}
-.taxa-label::after{content:'';flex:1;height:1px;background:var(--line);}
-.taxa-row{display:flex;gap:12px;margin-bottom:28px;}
-.taxa-btn{
-  flex:1;padding:16px 20px;
-  background:rgba(0,0,0,.3);
-  border:2px solid var(--line);
-  border-radius:2px;
-  cursor:pointer;transition:all .15s;
-  text-align:center;position:relative;overflow:hidden;
-}
-.taxa-btn:hover{border-color:rgba(0,230,180,.25);background:rgba(0,230,180,.04);}
-.taxa-btn.active{border-color:var(--acc);background:rgba(0,230,180,.09);}
-.taxa-btn.active::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,230,180,.07),transparent);}
-.taxa-pct{font-family:'Bebas Neue',sans-serif;font-size:40px;line-height:1;color:var(--text);transition:color .15s;}
-.taxa-btn.active .taxa-pct{color:var(--acc);}
-.taxa-lbl{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--muted);margin-top:4px;}
-.taxa-btn.active .taxa-lbl{color:var(--acc2);}
-.taxa-val{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim);margin-top:6px;transition:color .15s;}
-.taxa-btn.active .taxa-val{color:var(--acc2);}
-
-/* calc button */
-.btn-calc-main{
-  width:100%;padding:18px;
-  background:linear-gradient(135deg,rgba(0,230,180,.18),rgba(0,201,255,.12));
-  border:1px solid rgba(0,230,180,.35);
-  color:var(--acc);
-  font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;
-  cursor:pointer;transition:all .15s;border-radius:2px;
-  position:relative;overflow:hidden;
-}
-.btn-calc-main:hover{background:linear-gradient(135deg,rgba(0,230,180,.25),rgba(0,201,255,.18));border-color:var(--acc);}
-.btn-calc-main:active{transform:scale(.99);}
-
-/* ─ RESULT ─ */
-.launder-result{
-  display:none;
-  background:var(--panel);border:1px solid var(--line);
-  border-radius:2px;padding:28px;position:relative;overflow:hidden;
-  animation:mat-in .25s ease;
-}
-.launder-result::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--acc3),var(--acc),transparent);opacity:.5;}
-.launder-result.show{display:block;}
-
-.res-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px;}
-.res-box{background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:2px;padding:18px 16px;text-align:center;position:relative;}
-.res-box.highlight{border-color:rgba(0,230,180,.3);background:rgba(0,230,180,.06);}
-.res-label{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;}
-.res-value{font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1;color:var(--text);}
-.res-box.highlight .res-value{color:var(--acc);}
-.res-box.danger .res-value{color:var(--danger);}
-.res-box.cyan .res-value{color:var(--acc2);}
-
-/* big result */
-.res-big{
-  background:rgba(0,0,0,.5);
-  border:1px solid rgba(0,230,180,.2);
-  border-radius:2px;padding:24px;
-  text-align:center;
-  position:relative;overflow:hidden;
-}
-.res-big::after{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse 60% 50% at 50% 100%,rgba(0,230,180,.07),transparent);
-}
-.res-big-label{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:4px;color:var(--muted);text-transform:uppercase;margin-bottom:12px;}
-.res-big-value{
-  font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,8vw,68px);line-height:1;
-  background:linear-gradient(90deg,var(--acc),var(--acc2),var(--acc3));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  letter-spacing:1px;
-}
-.res-big-sub{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim);letter-spacing:2px;margin-top:8px;}
-
-/* reset launder */
-.btn-reset-launder{
-  width:100%;margin-top:16px;padding:12px;
-  background:rgba(232,64,64,.06);border:1px solid rgba(232,64,64,.22);
-  color:var(--danger);font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;
-  cursor:pointer;transition:all .12s;border-radius:1px;
-}
-.btn-reset-launder:hover{background:rgba(232,64,64,.14);border-color:var(--danger);}
-
-/* ─ FOOTER ─ */
-.site-footer{
-  position:relative;z-index:1;max-width:1120px;margin:0 auto;
-  border-top:1px solid var(--line);padding:18px 24px;
-  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;
-}
-.site-footer span{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim);letter-spacing:2px;}
-.site-footer b{color:var(--acc);}
-
-/* scrollbar */
-::-webkit-scrollbar{width:4px;}
-::-webkit-scrollbar-track{background:var(--bg0);}
-::-webkit-scrollbar-thumb{background:var(--dim);}
-::-webkit-scrollbar-thumb:hover{background:var(--acc);}
-
-/* responsive */
-@media(max-width:600px){
-  .hdr-title{font-size:40px;}
-  .res-row{grid-template-columns:1fr;}
-  .taxa-row{flex-direction:column;}
-  .wh-name{font-size:34px;}
-  .weapon-hero,.controls-pad,.attach-wrap,.mats-wrap{padding-left:16px;padding-right:16px;}
-  .mats-grid{grid-template-columns:1fr 1fr;}
-  .nav-btn{padding:12px 16px;font-size:13px;}
-  .ammo-layout{grid-template-columns:1fr;}
-  .ammo-res-top{flex-direction:column;}
-}
-
-/* ════════════════════════════════════════
-   AMMO CALCULATOR
-════════════════════════════════════════ */
-.ammo-layout{display:grid;grid-template-columns:320px 1fr;gap:20px;align-items:start;}
-@media(max-width:840px){.ammo-layout{grid-template-columns:1fr;}}
-.ammo-left-panel{position:sticky;top:20px;}
-
-.ammo-cat-strip{display:flex;flex-wrap:wrap;gap:0;border-bottom:1px solid var(--line);}
-.ammo-cat-btn{
-  padding:8px 10px;background:none;border:none;border-right:1px solid var(--line);
-  color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;
-  cursor:pointer;transition:all .12s;text-transform:uppercase;flex:1;min-width:55px;text-align:center;
-}
-.ammo-cat-btn:last-child{border-right:none;}
-.ammo-cat-btn:hover{background:rgba(0,230,180,.04);color:var(--text);}
-.ammo-cat-btn.active{background:rgba(0,230,180,.08);color:var(--acc);border-bottom:2px solid var(--acc);}
-
-.ammo-list{max-height:520px;overflow-y:auto;padding:4px 0;}
-.ammo-row{display:flex;align-items:center;border-bottom:1px solid rgba(255,255,255,.025);cursor:pointer;transition:background .1s;position:relative;}
-.ammo-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--acc2);transform:scaleY(0);transition:transform .12s;}
-.ammo-row:hover{background:rgba(0,201,255,.03);}
-.ammo-row.active{background:rgba(0,201,255,.07);}
-.ammo-row.active::before{transform:scaleY(1);}
-.ammo-row.hidden{display:none;}
-.ammo-row-num{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dim);padding:12px 10px;min-width:36px;text-align:center;border-right:1px solid var(--line);}
-.ammo-row.active .ammo-row-num{color:var(--acc2);}
-.ammo-row-info{padding:12px 14px;flex:1;}
-.ammo-row-name{font-size:13px;font-weight:800;color:var(--text);text-transform:uppercase;line-height:1;letter-spacing:.3px;}
-.ammo-row.active .ammo-row-name{color:var(--acc2);}
-.ammo-row-cat{font-size:10px;font-weight:600;letter-spacing:2px;color:var(--muted);margin-top:2px;}
-.ammo-row-praf{padding:12px 12px;font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--dim);white-space:nowrap;}
-.ammo-row.active .ammo-row-praf{color:var(--acc);}
-
-.ammo-right{display:flex;flex-direction:column;gap:16px;}
-.ammo-detail{display:none;flex-direction:column;gap:16px;}
-.ammo-detail.show{display:flex;}
-
-.ammo-hero{padding:20px 24px;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:10px;}
-.ammo-hero-name{font-family:'Bebas Neue',sans-serif;font-size:38px;line-height:1;color:var(--white);letter-spacing:1px;}
-.ammo-hero-cat{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--acc2);margin-top:4px;}
-.ammo-rate-box{background:rgba(0,201,255,.08);border:1px solid rgba(0,201,255,.25);border-radius:2px;padding:8px 14px;text-align:center;}
-.ammo-rate-val{font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1;color:var(--acc2);}
-.ammo-rate-lbl{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);margin-top:2px;}
-
-.ammo-presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;}
-.ammo-preset-btn{
-  padding:8px 18px;background:rgba(0,201,255,.07);border:1px solid rgba(0,201,255,.2);
-  border-radius:2px;color:var(--acc2);font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;
-  cursor:pointer;transition:all .12s;
-}
-.ammo-preset-btn:hover{background:rgba(0,201,255,.15);border-color:var(--acc2);}
-.ammo-preset-btn.selected{background:var(--acc2);color:#000;border-color:var(--acc2);}
-
-.ammo-result{padding:22px 24px;}
-.ammo-res-top{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:20px;}
-.ammo-res-box{background:rgba(0,0,0,.4);border:1px solid var(--line);border-radius:2px;padding:14px 18px;text-align:center;min-width:100px;}
-.ammo-res-label{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;}
-.ammo-res-val{font-family:'Bebas Neue',sans-serif;font-size:30px;line-height:1;color:var(--text);}
-.ammo-res-val.acc{color:var(--acc);}
-.ammo-res-val.cyan{color:var(--acc2);}
-.ammo-res-arrow{font-family:'Share Tech Mono',monospace;font-size:18px;color:var(--dim);}
-
-.ammo-big-result{
-  background:rgba(0,0,0,.5);border:1px solid rgba(0,201,255,.2);
-  border-radius:2px;padding:22px;text-align:center;
-  position:relative;overflow:hidden;margin-bottom:14px;
-}
-.ammo-big-result::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 100%,rgba(0,201,255,.06),transparent);}
-
-.ammo-remainder{
-  background:rgba(232,180,0,.06);border:1px solid rgba(232,180,0,.2);border-left:3px solid #e8b400;
-  border-radius:2px;padding:12px 16px;
-  font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:1.5px;color:#c89800;
-  display:flex;align-items:center;gap:10px;
-}
-.ammo-rem-icon{font-size:16px;}
+</style>
 </head>
 <body>
 
-<div class="bg-pattern"></div>
+<div class="bg-grid"></div>
 <div class="bg-glow"></div>
 
 <div class="wrap">
 
-  <!-- ─ HEADER ─ -->
+  <!-- HEADER -->
   <header class="hdr">
     <div>
       <div class="hdr-tag">// SPARTANRP · TOOL SUITE · v3.0</div>
       <div class="hdr-title">SPT<br><span>TOOLS</span></div>
     </div>
     <div class="hdr-right">
-      <span class="hdr-version">BUILD 2026.05</span>
-      <div class="hdr-status"><div class="status-dot"></div>SISTEM ACTIV</div>
+      <span class="hdr-ver">BUILD 2026.05</span>
+      <div class="hdr-status"><div class="dot"></div>SISTEM ACTIV</div>
     </div>
   </header>
 
-  <!-- ─ NAV ─ -->
-  <nav class="main-nav">
-    <button class="nav-btn active" onclick="switchSection('arme',this)">
-      <span class="nb-ic">🔫</span>ARME
-    </button>
-    <button class="nav-btn" onclick="switchSection('bani',this)">
-      <span class="nb-ic">💵</span>SPĂLARE BANI
-    </button>
-    <button class="nav-btn" onclick="switchSection('munitie',this)">
-      <span class="nb-ic">🔹</span>MUNIȚIE
-    </button>
+  <!-- NAV -->
+  <nav class="nav">
+    <button class="nav-btn active" onclick="goTo('arme',this)">🔫 ARME</button>
+    <button class="nav-btn" onclick="goTo('bani',this)">💵 SPĂLARE BANI</button>
+    <button class="nav-btn" onclick="goTo('munitie',this)">🔹 MUNIȚIE</button>
   </nav>
 
-  <!-- ══════════════════════════════════
-       SECTION: ARME
-  ══════════════════════════════════ -->
+  <!-- ════════════════════════
+       ARME
+  ════════════════════════ -->
   <div class="section active" id="sec-arme">
-    <div class="main-grid">
+    <div class="two-col">
 
-      <!-- LEFT: lista -->
-      <div class="panel" style="position:sticky;top:20px;">
-        <div class="panel-hdr">
-          <span class="panel-label">Selectează arma</span>
-          <span class="panel-num" id="weaponCount"></span>
+      <div class="panel ammo-left" style="position:sticky;top:20px;">
+        <div class="ph">
+          <span class="ph-label">Selectează arma</span>
+          <span class="ph-num" id="wCount"></span>
         </div>
-        <div class="cat-strip" id="catStrip"></div>
-        <div class="weapon-list" id="weaponList"></div>
+        <div class="cat-strip" id="wCatStrip"></div>
+        <div class="w-list" id="wList"></div>
       </div>
 
-      <!-- RIGHT: detalii -->
-      <div class="right-col">
-
-        <div class="panel" id="emptyPanel">
-          <div class="empty-state">
+      <div class="r-col">
+        <div class="panel" id="wEmpty">
+          <div class="empty">
             <div class="empty-icon">🎯</div>
-            <div class="empty-text">Nicio armă selectată<br>Alege din lista din stânga<br>pentru a vedea materialele</div>
+            <div class="empty-txt">Nicio armă selectată<br>Alege din stânga</div>
           </div>
         </div>
-
-        <div class="detail-panel" id="detailPanel">
+        <div class="d-panel" id="wDetail">
+          <div class="panel"><div class="w-hero" id="wHero"></div></div>
           <div class="panel">
-            <div class="weapon-hero" id="weaponHero"></div>
-          </div>
-          <div class="panel">
-            <div class="controls-pad">
-              <div class="ctrl-row">
-                <span class="ctrl-label">Cantitate</span>
-                <div class="qty-control">
-                  <button class="qty-btn" onclick="changeQty(-1)">−</button>
-                  <input class="qty-input" id="wcQty" type="number" value="1" min="1" max="999" oninput="wcCalc()">
-                  <button class="qty-btn" onclick="changeQty(1)">+</button>
+            <div class="cpad">
+              <div class="crow">
+                <span class="clbl">Cantitate</span>
+                <div class="qc">
+                  <button class="qbtn" onclick="wQty(-1)">−</button>
+                  <input class="qinput" id="wQty" type="number" value="1" min="1" max="999" oninput="wCalc()">
+                  <button class="qbtn" onclick="wQty(1)">+</button>
                 </div>
-                <button class="btn-reset" onclick="resetArme()">⟳ RESET</button>
+                <button class="btn-reset" onclick="wReset()">⟳ RESET</button>
               </div>
             </div>
-            <div class="attach-wrap" id="attachWrap">
-              <div class="section-ttl">Atașamente opționale</div>
-              <div class="attach-grid" id="attachGrid"></div>
+            <div class="att-wrap" id="attWrap">
+              <div class="sec-ttl">Atașamente opționale</div>
+              <div class="att-grid" id="attGrid"></div>
             </div>
           </div>
           <div class="panel">
             <div class="mats-wrap" id="matsWrap">
-              <div class="mats-head">
+              <div class="mats-hd">
                 <span class="mats-lbl">Materiale necesare</span>
                 <div class="mats-div"></div>
-                <span class="mats-info" id="matsInfo"></span>
+                <span class="mats-inf" id="matsInf"></span>
               </div>
               <div class="mats-grid" id="matsGrid"></div>
             </div>
           </div>
         </div>
-
       </div>
+
     </div>
   </div>
 
-  <!-- ══════════════════════════════════
-       SECTION: SPALARE BANI
-  ══════════════════════════════════ -->
+  <!-- ════════════════════════
+       SPALARE BANI
+  ════════════════════════ -->
   <div class="section" id="sec-bani">
     <div class="launder-wrap">
 
-      <!-- Warning -->
       <div class="warn-banner">
         <div class="warn-icon">⚠️</div>
-        <div class="warn-text">
-          Minim de spălat: <b>$50.000</b><br>
-          Introdui suma murdară → alegi taxa → primești suma curată
-        </div>
+        <div class="warn-txt">Minim de spălat: <b>$50.000</b><br>Introdui suma murdară → alegi taxa → primești suma curată</div>
       </div>
 
-      <!-- Input card -->
-      <div class="launder-card">
-        <div class="lc-title">Suma de spălat</div>
-
-        <div class="amount-field">
-          <div class="amount-prefix">$</div>
-          <input class="amount-input" id="launderAmt" type="number" min="50000" step="1000" placeholder="50 000" oninput="launderPreview()">
+      <div class="l-card">
+        <div class="l-title">Suma de spălat</div>
+        <div class="amt-field">
+          <div class="amt-prefix">$</div>
+          <input class="amt-input" id="lAmt" type="number" min="50000" step="1000" placeholder="50 000" oninput="lPreview()">
         </div>
-        <div class="amount-hint" id="amountHint">Introdu minim <b>$50,000</b></div>
-
-        <div class="taxa-label">Taxa mașinii de spălat</div>
+        <div class="amt-hint" id="lHint">Introdu minim <b>$50,000</b></div>
+        <div class="taxa-lbl">Taxa mașinii de spălat</div>
         <div class="taxa-row">
-          <div class="taxa-btn" id="taxa5" onclick="selectTaxa(5)">
+          <div class="taxa-btn" id="t5" onclick="pickTaxa(5)">
             <div class="taxa-pct">5%</div>
-            <div class="taxa-lbl">TAXĂ MICĂ</div>
-            <div class="taxa-val" id="taxaVal5">— $0</div>
+            <div class="taxa-nm">TAXĂ MICĂ</div>
+            <div class="taxa-vl" id="tv5">— $0</div>
           </div>
-          <div class="taxa-btn" id="taxa10" onclick="selectTaxa(10)">
+          <div class="taxa-btn" id="t10" onclick="pickTaxa(10)">
             <div class="taxa-pct">10%</div>
-            <div class="taxa-lbl">TAXĂ MARE</div>
-            <div class="taxa-val" id="taxaVal10">— $0</div>
+            <div class="taxa-nm">TAXĂ MARE</div>
+            <div class="taxa-vl" id="tv10">— $0</div>
           </div>
         </div>
-
-        <button class="btn-calc-main" onclick="calcLaunder()">CALCULEAZĂ</button>
+        <button class="btn-calc" onclick="lCalc()">CALCULEAZĂ</button>
       </div>
 
-      <!-- Result card -->
-      <div class="launder-result" id="launderResult">
-        <div class="lc-title">Rezultat spălare</div>
-
+      <div class="l-result" id="lResult">
+        <div class="l-title">Rezultat spălare</div>
         <div class="res-row">
-          <div class="res-box">
-            <div class="res-label">Suma murdară</div>
-            <div class="res-value" id="resDirty"></div>
-          </div>
-          <div class="res-box danger">
-            <div class="res-label">Taxă reținută</div>
-            <div class="res-value" id="resTaxa"></div>
-          </div>
-          <div class="res-box cyan">
-            <div class="res-label">Procent taxă</div>
-            <div class="res-value" id="resPct"></div>
+          <div class="res-box"><div class="res-lbl">Suma murdară</div><div class="res-val" id="rDirty"></div></div>
+          <div class="res-box red"><div class="res-lbl">Taxă reținută</div><div class="res-val" id="rTaxa"></div></div>
+          <div class="res-box cyan"><div class="res-lbl">Procent taxă</div><div class="res-val" id="rPct"></div></div>
+        </div>
+        <div class="big-res">
+          <div class="big-lbl">💵 BANI CURAȚI PRIMIȚI</div>
+          <div class="big-val" id="rClean"></div>
+          <div class="big-sub" id="rSub"></div>
+        </div>
+        <button class="btn-reset-l" onclick="lReset()">⟳ RESETEAZĂ CALCULUL</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════
+       MUNITIE
+  ════════════════════════ -->
+  <div class="section" id="sec-munitie">
+    <div class="ammo-grid">
+
+      <div class="panel ammo-left">
+        <div class="ph">
+          <span class="ph-label">Tip muniție</span>
+          <span class="ph-num" id="aCount"></span>
+        </div>
+        <div class="acat-strip" id="aCatStrip"></div>
+        <div class="a-list" id="aList"></div>
+      </div>
+
+      <div class="ammo-r">
+        <div class="panel" id="aEmpty">
+          <div class="empty">
+            <div class="empty-icon">🔹</div>
+            <div class="empty-txt">Nicio muniție selectată<br>Alege din stânga<br>pentru a calcula Praful de Pușcă</div>
           </div>
         </div>
-
-        <div class="res-big">
-          <div class="res-big-label">💵 BANI CURAȚI PRIMIȚI</div>
-          <div class="res-big-value" id="resClean"></div>
-          <div class="res-big-sub" id="resSub"></div>
+        <div class="ammo-detail" id="aDetail">
+          <div class="panel"><div class="a-hero" id="aHero"></div></div>
+          <div class="panel">
+            <div class="cpad">
+              <div class="l-title" style="margin-bottom:12px;">Cantitate muniție dorită</div>
+              <div class="a-presets">
+                <button class="a-preset" onclick="aSetQty(10)">10</button>
+                <button class="a-preset" onclick="aSetQty(50)">50</button>
+                <button class="a-preset" onclick="aSetQty(100)">100</button>
+                <button class="a-preset" onclick="aSetQty(250)">250</button>
+                <button class="a-preset" onclick="aSetQty(500)">500</button>
+                <button class="a-preset" onclick="aSetQty(1000)">1000</button>
+              </div>
+              <div class="crow">
+                <span class="clbl">Custom</span>
+                <div class="qc">
+                  <button class="qbtn" onclick="aQty(-10)">−</button>
+                  <input class="qinput" id="aQty" type="number" value="100" min="1" oninput="aCalc()" style="width:86px;">
+                  <button class="qbtn" onclick="aQty(10)">+</button>
+                </div>
+                <button class="btn-reset" onclick="aReset()">⟳ RESET</button>
+              </div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="a-res">
+              <div class="a-res-top">
+                <div class="a-res-box"><div class="a-res-lbl">Muniție</div><div class="a-res-val green" id="aRQ">—</div></div>
+                <div class="a-arrow">→</div>
+                <div class="a-res-box"><div class="a-res-lbl">Loturi de 10</div><div class="a-res-val cyan" id="aRL">—</div></div>
+                <div class="a-arrow">×</div>
+                <div class="a-res-box"><div class="a-res-lbl">Praf / lot</div><div class="a-res-val" id="aRP">—</div></div>
+              </div>
+              <div class="a-big">
+                <div class="big-lbl">💥 PRAF DE PUȘCĂ NECESAR</div>
+                <div class="big-val" id="aTotal">—</div>
+                <div class="big-sub" id="aSub"></div>
+              </div>
+              <div class="a-warn" id="aWarn" style="display:none;">
+                <span style="font-size:16px;">⚠</span>
+                <span id="aWarnTxt"></span>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <button class="btn-reset-launder" onclick="resetLaunder()">⟳ RESETEAZĂ CALCULUL</button>
       </div>
 
     </div>
@@ -640,524 +552,329 @@ body::after{
 
 </div><!-- /wrap -->
 
-  <!-- ══════════════════════════════════
-       SECTION: MUNITIE
-  ══════════════════════════════════ -->
-  <div class="section" id="sec-munitie">
-    <div class="ammo-layout">
-
-      <!-- LEFT: categorie + lista -->
-      <div class="panel ammo-left-panel">
-        <div class="panel-hdr">
-          <span class="panel-label">Tip muniție</span>
-          <span class="panel-num" id="ammoCount"></span>
-        </div>
-        <div class="ammo-cat-strip" id="ammoCatStrip"></div>
-        <div class="ammo-list" id="ammoList"></div>
-      </div>
-
-      <!-- RIGHT: calculator -->
-      <div class="ammo-right">
-
-        <!-- Stare goală -->
-        <div class="panel" id="ammoEmptyPanel">
-          <div class="empty-state">
-            <div class="empty-icon">🔹</div>
-            <div class="empty-text">Nicio muniție selectată<br>Alege din lista din stânga<br>pentru a calcula Praful de Pușcă</div>
-          </div>
-        </div>
-
-        <!-- Calculator activ -->
-        <div class="ammo-detail" id="ammoDetail">
-
-          <!-- Hero tip muniție -->
-          <div class="panel">
-            <div class="ammo-hero" id="ammoHero"></div>
-          </div>
-
-          <!-- Input cantitate + presets -->
-          <div class="panel">
-            <div class="controls-pad">
-              <div class="lc-title">Cantitate de muniție dorită</div>
-
-              <!-- Presets -->
-              <div class="ammo-presets" id="ammoPresets">
-                <button class="ammo-preset-btn" onclick="ammoSetQty(10)">10</button>
-                <button class="ammo-preset-btn" onclick="ammoSetQty(50)">50</button>
-                <button class="ammo-preset-btn" onclick="ammoSetQty(100)">100</button>
-                <button class="ammo-preset-btn" onclick="ammoSetQty(250)">250</button>
-                <button class="ammo-preset-btn" onclick="ammoSetQty(500)">500</button>
-                <button class="ammo-preset-btn" onclick="ammoSetQty(1000)">1000</button>
-              </div>
-
-              <div class="ctrl-row" style="margin-top:14px;">
-                <span class="ctrl-label">CUSTOM</span>
-                <div class="qty-control">
-                  <button class="qty-btn" onclick="ammoChangeQty(-10)">−</button>
-                  <input class="qty-input" id="ammoQty" type="number" value="100" min="1" oninput="ammoCalc()">
-                  <button class="qty-btn" onclick="ammoChangeQty(10)">+</button>
-                </div>
-                <button class="btn-reset" onclick="resetAmmo()">⟳ RESET</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Rezultat -->
-          <div class="panel">
-            <div class="ammo-result" id="ammoResult">
-              <div class="ammo-res-top">
-                <div class="ammo-res-box">
-                  <div class="ammo-res-label">MUNIȚIE</div>
-                  <div class="ammo-res-val acc" id="ammoResQty">—</div>
-                </div>
-                <div class="ammo-res-arrow">→</div>
-                <div class="ammo-res-box">
-                  <div class="ammo-res-label">LOTURI DE 10</div>
-                  <div class="ammo-res-val cyan" id="ammoResLoturi">—</div>
-                </div>
-                <div class="ammo-res-arrow">×</div>
-                <div class="ammo-res-box">
-                  <div class="ammo-res-label">PRAF / LOT</div>
-                  <div class="ammo-res-val" id="ammoResPrafLot">—</div>
-                </div>
-              </div>
-
-              <div class="ammo-big-result">
-                <div class="res-big-label">💥 PRAF DE PUȘCĂ NECESAR</div>
-                <div class="res-big-value" id="ammoResPraf">—</div>
-                <div class="res-big-sub" id="ammoResSub"></div>
-              </div>
-
-              <div class="ammo-remainder" id="ammoRemainder" style="display:none;">
-                <span class="ammo-rem-icon">⚠</span>
-                <span id="ammoRemText"></span>
-              </div>
-            </div>
-          </div>
-
-        </div><!-- /ammo-detail -->
-      </div><!-- /ammo-right -->
-    </div><!-- /ammo-layout -->
-  </div><!-- /sec-munitie -->
-
-</div><!-- /wrap -->
-
-<footer class="site-footer">
+<footer class="footer">
   <span>© 2026 &nbsp;<b>SPT CATALIN</b></span>
   <span>INSTAGRAM: SPT.CATALIN</span>
 </footer>
 
 <script>
-// ════════════════════════════════════════
+// ════════════════════════════════
 //  NAV
-// ════════════════════════════════════════
-function switchSection(id, btn) {
+// ════════════════════════════════
+function goTo(id, btn) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('sec-' + id).classList.add('active');
   btn.classList.add('active');
-  if (id === 'arme') wcEnsureInit();
 }
 
-// ════════════════════════════════════════
-//  WEAPONS DATA
-// ════════════════════════════════════════
+// ════════════════════════════════
+//  ARME DATA
+// ════════════════════════════════
 const WEAPONS = [
-  { id:'micro_smg',     name:'Micro SMG',      cat:'SMG',    code:'W-01', mats:{ otel:15, suruburi:95,  arc:1, polimer:42, teava:1         } },
-  { id:'tec9',          name:'TEC-9',           cat:'SMG',    code:'W-02', mats:{ otel:12, suruburi:100, arc:1, polimer:38                  } },
-  { id:'mini_smg',      name:'Mini SMG',        cat:'SMG',    code:'W-03', mats:{ otel:11, suruburi:97,  arc:1, polimer:36, lemn:1          } },
-  { id:'smg',           name:'SMG',             cat:'SMG',    code:'W-04', mats:{ otel:13, suruburi:105, arc:1, polimer:48, teava:1         } },
-  { id:'combat_pdw',    name:'Combat PDW',      cat:'SMG',    code:'W-05', mats:{ otel:14, suruburi:110, arc:1, polimer:50, teava:1         } },
-  { id:'tec_pistol',    name:'TEC-Pistol',      cat:'Pistol', code:'W-06', mats:{ otel:14, suruburi:115, arc:1, polimer:44, teava:1         } },
-  { id:'assault_rifle', name:'Assault Rifle',   cat:'Rifle',  code:'W-07', mats:{ otel:17, suruburi:135, arc:2, polimer:68, lemn:1, teava:1 } },
-  { id:'compact_rifle', name:'Compact Rifle',   cat:'Rifle',  code:'W-08', mats:{ otel:19, suruburi:115, arc:2, polimer:44, lemn:1, teava:1 } },
-  { id:'carabine_rifle',name:'Carabine Rifle',  cat:'Rifle',  code:'W-09', mats:{ otel:18, suruburi:140, arc:2, polimer:72, teava:1         } },
-  { id:'advanced_rifle',name:'Advanced Rifle',  cat:'Rifle',  code:'W-10', mats:{ otel:18, suruburi:145, arc:2, polimer:78, teava:1         } },
+  {id:'micro_smg',    name:'Micro SMG',      cat:'SMG',    code:'W-01', mats:{otel:15,suruburi:95, arc:1,polimer:42,teava:1}},
+  {id:'tec9',         name:'TEC-9',           cat:'SMG',    code:'W-02', mats:{otel:12,suruburi:100,arc:1,polimer:38}},
+  {id:'mini_smg',     name:'Mini SMG',        cat:'SMG',    code:'W-03', mats:{otel:11,suruburi:97, arc:1,polimer:36,lemn:1}},
+  {id:'smg',          name:'SMG',             cat:'SMG',    code:'W-04', mats:{otel:13,suruburi:105,arc:1,polimer:48,teava:1}},
+  {id:'combat_pdw',   name:'Combat PDW',      cat:'SMG',    code:'W-05', mats:{otel:14,suruburi:110,arc:1,polimer:50,teava:1}},
+  {id:'tec_pistol',   name:'TEC-Pistol',      cat:'Pistol', code:'W-06', mats:{otel:14,suruburi:115,arc:1,polimer:44,teava:1}},
+  {id:'assault',      name:'Assault Rifle',   cat:'Rifle',  code:'W-07', mats:{otel:17,suruburi:135,arc:2,polimer:68,lemn:1,teava:1}},
+  {id:'compact',      name:'Compact Rifle',   cat:'Rifle',  code:'W-08', mats:{otel:19,suruburi:115,arc:2,polimer:44,lemn:1,teava:1}},
+  {id:'carabine',     name:'Carabine Rifle',  cat:'Rifle',  code:'W-09', mats:{otel:18,suruburi:140,arc:2,polimer:72,teava:1}},
+  {id:'advanced',     name:'Advanced Rifle',  cat:'Rifle',  code:'W-10', mats:{otel:18,suruburi:145,arc:2,polimer:78,teava:1}},
 ];
-const ATTACHMENTS = [
-  { id:'amort_micro',   name:'Amortizor',       for:['micro_smg'],     mats:{ otel:3, suruburi:5,  polimer:3        } },
-  { id:'amort_tec9',    name:'Amortizor',       for:['tec9'],          mats:{ otel:2, suruburi:5,  polimer:2        } },
-  { id:'amort_tpist',   name:'Muzzle Brake',    for:['tec_pistol'],    mats:{ otel:3, suruburi:5,  polimer:3        } },
-  { id:'amort_smg',     name:'Amortizor',       for:['smg'],           mats:{ otel:3, suruburi:5,  polimer:3        } },
-  { id:'amort_assault', name:'Amortizor',       for:['assault_rifle'], mats:{ otel:3, suruburi:5,  polimer:3        } },
-  { id:'amort_carbine', name:'Amortizor',       for:['carabine_rifle'],mats:{ otel:3, suruburi:5,  polimer:3        } },
-  { id:'amort_adv',     name:'Amortizor',       for:['advanced_rifle'],mats:{ otel:3, suruburi:5,  polimer:3        } },
-  { id:'inc_micro',     name:'Încărcător Ext.', for:['micro_smg'],     mats:{ otel:2, suruburi:10, polimer:2, arc:1 } },
-  { id:'inc_tec9',      name:'Încărcător Ext.', for:['tec9'],          mats:{ otel:2, suruburi:8,  polimer:2, arc:1 } },
-  { id:'inc_tpist',     name:'Încărcător Ext.', for:['tec_pistol'],    mats:{ otel:2, suruburi:10, polimer:2, arc:1 } },
-  { id:'inc_smg',       name:'Încărcător Ext.', for:['smg'],           mats:{ otel:2, suruburi:10, polimer:2, arc:1 } },
-  { id:'bat_smg',       name:'Baterie Gloanțe', for:['smg'],           mats:{ otel:3, suruburi:20, polimer:3, arc:1 } },
-  { id:'inc_assault',   name:'Încărcător Ext.', for:['assault_rifle'], mats:{ otel:2, suruburi:5,  polimer:2, arc:1 } },
-  { id:'bat_assault',   name:'Baterie Gloanțe', for:['assault_rifle'], mats:{ otel:3, suruburi:20, polimer:3, arc:1 } },
-  { id:'grip_assault',  name:'Grip Vertical',   for:['assault_rifle'], mats:{ otel:1, suruburi:5,  polimer:1        } },
-  { id:'inc_compact',   name:'Încărcător Ext.', for:['compact_rifle'], mats:{ otel:3, suruburi:30, polimer:3, arc:1 } },
-  { id:'bat_compact',   name:'Baterie Gloanțe', for:['compact_rifle'], mats:{ otel:3, suruburi:20, polimer:3, arc:1 } },
-  { id:'bat_carbine',   name:'Baterie Gloanțe', for:['carabine_rifle'],mats:{ otel:3, suruburi:20, polimer:3, arc:1 } },
-  { id:'inc_adv',       name:'Încărcător Ext.', for:['advanced_rifle'],mats:{ otel:1, suruburi:5,  polimer:1, arc:1 } },
+const ATTS = [
+  {id:'am_micro',  name:'Amortizor',       for:['micro_smg'],  mats:{otel:3,suruburi:5, polimer:3}},
+  {id:'am_tec9',   name:'Amortizor',       for:['tec9'],       mats:{otel:2,suruburi:5, polimer:2}},
+  {id:'am_tpist',  name:'Muzzle Brake',    for:['tec_pistol'], mats:{otel:3,suruburi:5, polimer:3}},
+  {id:'am_smg',    name:'Amortizor',       for:['smg'],        mats:{otel:3,suruburi:5, polimer:3}},
+  {id:'am_ass',    name:'Amortizor',       for:['assault'],    mats:{otel:3,suruburi:5, polimer:3}},
+  {id:'am_car',    name:'Amortizor',       for:['carabine'],   mats:{otel:3,suruburi:5, polimer:3}},
+  {id:'am_adv',    name:'Amortizor',       for:['advanced'],   mats:{otel:3,suruburi:5, polimer:3}},
+  {id:'in_micro',  name:'Încărcător Ext.', for:['micro_smg'],  mats:{otel:2,suruburi:10,polimer:2,arc:1}},
+  {id:'in_tec9',   name:'Încărcător Ext.', for:['tec9'],       mats:{otel:2,suruburi:8, polimer:2,arc:1}},
+  {id:'in_tpist',  name:'Încărcător Ext.', for:['tec_pistol'], mats:{otel:2,suruburi:10,polimer:2,arc:1}},
+  {id:'in_smg',    name:'Încărcător Ext.', for:['smg'],        mats:{otel:2,suruburi:10,polimer:2,arc:1}},
+  {id:'bt_smg',    name:'Baterie Gloanțe', for:['smg'],        mats:{otel:3,suruburi:20,polimer:3,arc:1}},
+  {id:'in_ass',    name:'Încărcător Ext.', for:['assault'],    mats:{otel:2,suruburi:5, polimer:2,arc:1}},
+  {id:'bt_ass',    name:'Baterie Gloanțe', for:['assault'],    mats:{otel:3,suruburi:20,polimer:3,arc:1}},
+  {id:'gr_ass',    name:'Grip Vertical',   for:['assault'],    mats:{otel:1,suruburi:5, polimer:1}},
+  {id:'in_cmp',    name:'Încărcător Ext.', for:['compact'],    mats:{otel:3,suruburi:30,polimer:3,arc:1}},
+  {id:'bt_cmp',    name:'Baterie Gloanțe', for:['compact'],    mats:{otel:3,suruburi:20,polimer:3,arc:1}},
+  {id:'bt_car',    name:'Baterie Gloanțe', for:['carabine'],   mats:{otel:3,suruburi:20,polimer:3,arc:1}},
+  {id:'in_adv',    name:'Încărcător Ext.', for:['advanced'],   mats:{otel:1,suruburi:5, polimer:1,arc:1}},
 ];
 const MAT_META = {
-  otel:     { label:'Oțel',          unit:'unități' },
-  suruburi: { label:'Șuruburi',       unit:'bucăți'  },
-  arc:      { label:'Arc Metalic',    unit:'bucăți'  },
-  polimer:  { label:'Polimer',        unit:'unități' },
-  teava:    { label:'Țeavă Metalică', unit:'bucăți'  },
-  lemn:     { label:'Lemn',           unit:'bucăți'  },
+  otel:{label:'Oțel',unit:'unități'},
+  suruburi:{label:'Șuruburi',unit:'bucăți'},
+  arc:{label:'Arc Metalic',unit:'bucăți'},
+  polimer:{label:'Polimer',unit:'unități'},
+  teava:{label:'Țeavă Metalică',unit:'bucăți'},
+  lemn:{label:'Lemn',unit:'bucăți'},
 };
 
-let selectedWeapon = null, selectedAttach = new Set(), activeCat = 'Toate', wcBuilt = false;
+let selW = null, selAtt = new Set(), wCat = 'Toate';
+const W_CATS = ['Toate',...new Set(WEAPONS.map(w=>w.cat))];
 
-function wcEnsureInit() { if (!wcBuilt) { buildCats(); buildWeaponList(); wcBuilt = true; } }
-
-const CATS = ['Toate', ...new Set(WEAPONS.map(w => w.cat))];
-function buildCats() {
-  const strip = document.getElementById('catStrip');
-  CATS.forEach(c => {
+function wInit() {
+  const strip = document.getElementById('wCatStrip');
+  W_CATS.forEach(c => {
     const b = document.createElement('button');
-    b.className = 'cat-btn' + (c === activeCat ? ' active' : '');
+    b.className = 'cat-btn' + (c===wCat?' active':'');
     b.textContent = c;
-    b.onclick = () => {
-      activeCat = c;
-      document.querySelectorAll('.cat-btn').forEach(x => x.classList.remove('active'));
-      b.classList.add('active');
-      filterWeapons();
-    };
+    b.onclick = () => { wCat=c; document.querySelectorAll('.cat-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); wFilter(); };
     strip.appendChild(b);
   });
-}
-function filterWeapons() {
-  let vis = 0;
-  document.querySelectorAll('.weapon-row').forEach(r => {
-    const show = activeCat === 'Toate' || r.dataset.cat === activeCat;
-    r.classList.toggle('hidden', !show);
-    if (show) vis++;
-  });
-  document.getElementById('weaponCount').textContent = vis + ' / ' + WEAPONS.length;
-}
-function buildWeaponList() {
-  const list = document.getElementById('weaponList');
+  const list = document.getElementById('wList');
   WEAPONS.forEach(w => {
-    const row = document.createElement('div');
-    row.className = 'weapon-row'; row.id = 'wr_' + w.id; row.dataset.cat = w.cat;
-    row.innerHTML = `<div class="wr-code">${w.code}</div><div class="wr-info"><div class="wr-name">${w.name}</div><div class="wr-cat">${w.cat}</div></div><div class="wr-arrow">›</div>`;
-    row.onclick = () => selectWeapon(w.id);
-    list.appendChild(row);
+    const r = document.createElement('div');
+    r.className='w-row'; r.id='wr_'+w.id; r.dataset.cat=w.cat;
+    r.innerHTML=`<div class="w-code">${w.code}</div><div class="w-info"><div class="w-name">${w.name}</div><div class="w-cat">${w.cat}</div></div><div class="w-arr">›</div>`;
+    r.onclick=()=>wSel(w.id);
+    list.appendChild(r);
   });
-  document.getElementById('weaponCount').textContent = WEAPONS.length + ' / ' + WEAPONS.length;
+  document.getElementById('wCount').textContent = WEAPONS.length+' / '+WEAPONS.length;
 }
-function selectWeapon(id) {
-  selectedWeapon = id; selectedAttach = new Set();
-  document.querySelectorAll('.weapon-row').forEach(r => r.classList.toggle('active', r.id === 'wr_' + id));
-  const w = WEAPONS.find(x => x.id === id);
-  document.getElementById('weaponHero').innerHTML = `<div><div class="wh-name">${w.name}</div><div class="wh-cat">${w.cat} · ${w.code}</div></div><div><span class="wh-tag">SELECTED</span></div>`;
-  const avail = ATTACHMENTS.filter(a => a.for.includes(id));
-  const wrap = document.getElementById('attachWrap'), grid = document.getElementById('attachGrid');
-  grid.innerHTML = '';
-  if (avail.length) {
-    wrap.style.display = 'block';
-    avail.forEach(a => {
-      const el = document.createElement('div');
-      el.className = 'attach-item'; el.id = 'att_' + a.id;
-      el.innerHTML = `<div class="a-check">✓</div><div class="a-name">${a.name}</div>`;
-      el.onclick = () => { if(selectedAttach.has(a.id)) selectedAttach.delete(a.id); else selectedAttach.add(a.id); el.classList.toggle('active', selectedAttach.has(a.id)); wcCalc(); };
+
+function wFilter() {
+  let v=0;
+  document.querySelectorAll('.w-row').forEach(r=>{const ok=wCat==='Toate'||r.dataset.cat===wCat;r.classList.toggle('hidden',!ok);if(ok)v++;});
+  document.getElementById('wCount').textContent=v+' / '+WEAPONS.length;
+}
+
+function wSel(id) {
+  selW=id; selAtt=new Set();
+  document.querySelectorAll('.w-row').forEach(r=>r.classList.toggle('active',r.id==='wr_'+id));
+  const w=WEAPONS.find(x=>x.id===id);
+  document.getElementById('wHero').innerHTML=`<div><div class="w-hero-name">${w.name}</div><div class="w-hero-cat">${w.cat} · ${w.code}</div></div><div><span class="w-badge">SELECTED</span></div>`;
+  const avail=ATTS.filter(a=>a.for.includes(id));
+  const wrap=document.getElementById('attWrap'), grid=document.getElementById('attGrid');
+  grid.innerHTML='';
+  if(avail.length){
+    wrap.style.display='block';
+    avail.forEach(a=>{
+      const el=document.createElement('div');
+      el.className='att-item'; el.id='att_'+a.id;
+      el.innerHTML=`<div class="att-chk">✓</div><div class="att-nm">${a.name}</div>`;
+      el.onclick=()=>{if(selAtt.has(a.id))selAtt.delete(a.id);else selAtt.add(a.id);el.classList.toggle('active',selAtt.has(a.id));wCalc();};
       grid.appendChild(el);
     });
-  } else { wrap.style.display = 'none'; }
-  document.getElementById('emptyPanel').style.display = 'none';
-  document.getElementById('detailPanel').classList.add('show');
+  } else { wrap.style.display='none'; }
+  document.getElementById('wEmpty').style.display='none';
+  document.getElementById('wDetail').classList.add('show');
   document.getElementById('matsWrap').classList.add('show');
-  wcCalc();
+  wCalc();
 }
-function wcCalc() {
-  if (!selectedWeapon) return;
-  const qty = Math.max(1, parseInt(document.getElementById('wcQty').value) || 1);
-  const w = WEAPONS.find(x => x.id === selectedWeapon);
-  const totals = {};
-  const addM = (mats, mult) => Object.entries(mats).forEach(([k,v]) => { totals[k]=(totals[k]||0)+v*mult; });
-  addM(w.mats, qty);
-  selectedAttach.forEach(aid => { const a=ATTACHMENTS.find(x=>x.id===aid); if(a) addM(a.mats,qty); });
-  const attN = selectedAttach.size;
-  document.getElementById('matsInfo').textContent = qty + '× ' + w.name + (attN ? ' + ' + attN + ' ATT' : '');
-  const grid = document.getElementById('matsGrid'); grid.innerHTML = '';
-  ['otel','suruburi','arc','polimer','teava','lemn'].forEach(k => {
-    if (!totals[k]) return;
-    const m = MAT_META[k];
-    const d = document.createElement('div'); d.className = 'mat-card';
-    d.innerHTML = `<div class="mat-qty">${totals[k]}</div><div><div class="mat-name">${m.label}</div><div class="mat-unit">${m.unit}</div></div>`;
+
+function wCalc() {
+  if(!selW) return;
+  const qty=Math.max(1,parseInt(document.getElementById('wQty').value)||1);
+  const w=WEAPONS.find(x=>x.id===selW);
+  const t={};
+  const add=(m,q)=>Object.entries(m).forEach(([k,v])=>{t[k]=(t[k]||0)+v*q;});
+  add(w.mats,qty);
+  selAtt.forEach(aid=>{const a=ATTS.find(x=>x.id===aid);if(a)add(a.mats,qty);});
+  document.getElementById('matsInf').textContent=qty+'× '+w.name+(selAtt.size?' + '+selAtt.size+' ATT':'');
+  const grid=document.getElementById('matsGrid'); grid.innerHTML='';
+  ['otel','suruburi','arc','polimer','teava','lemn'].forEach(k=>{
+    if(!t[k]) return;
+    const m=MAT_META[k];
+    const d=document.createElement('div'); d.className='mat-card';
+    d.innerHTML=`<div class="mat-qty">${t[k]}</div><div><div class="mat-name">${m.label}</div><div class="mat-unit">${m.unit}</div></div>`;
     grid.appendChild(d);
   });
 }
-function changeQty(d) {
-  const inp = document.getElementById('wcQty');
-  inp.value = Math.max(1, Math.min(999, (parseInt(inp.value)||1) + d));
-  wcCalc();
+
+function wQty(d) {
+  const inp=document.getElementById('wQty');
+  inp.value=Math.max(1,Math.min(999,(parseInt(inp.value)||1)+d));
+  wCalc();
 }
-function resetArme() {
-  selectedWeapon = null; selectedAttach = new Set();
-  document.querySelectorAll('.weapon-row').forEach(r => r.classList.remove('active'));
-  activeCat = 'Toate';
-  document.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b.textContent==='Toate'));
-  filterWeapons();
-  document.getElementById('wcQty').value = '1';
-  document.getElementById('emptyPanel').style.display = '';
-  document.getElementById('detailPanel').classList.remove('show');
+
+function wReset() {
+  selW=null; selAtt=new Set();
+  document.querySelectorAll('.w-row').forEach(r=>r.classList.remove('active'));
+  wCat='Toate';
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.toggle('active',b.textContent==='Toate'));
+  wFilter();
+  document.getElementById('wQty').value='1';
+  document.getElementById('wEmpty').style.display='';
+  document.getElementById('wDetail').classList.remove('show');
   document.getElementById('matsWrap').classList.remove('show');
-  document.getElementById('attachWrap').style.display = 'none';
-  document.getElementById('attachGrid').innerHTML = '';
-  document.getElementById('matsGrid').innerHTML = '';
+  document.getElementById('attWrap').style.display='none';
+  document.getElementById('attGrid').innerHTML='';
+  document.getElementById('matsGrid').innerHTML='';
 }
 
-// ════════════════════════════════════════
+// ════════════════════════════════
 //  SPALARE BANI
-// ════════════════════════════════════════
-let selectedTaxa = null;
+// ════════════════════════════════
+let selTaxa = null;
+function fmtD(n){ return '$'+Math.round(n).toLocaleString('ro-RO'); }
 
-function fmt(n) {
-  return '$' + Math.round(n).toLocaleString('ro-RO');
+function pickTaxa(p) {
+  selTaxa=p;
+  document.getElementById('t5').classList.toggle('active',p===5);
+  document.getElementById('t10').classList.toggle('active',p===10);
+  lPreview();
 }
-
-function selectTaxa(pct) {
-  selectedTaxa = pct;
-  document.getElementById('taxa5').classList.toggle('active',  pct === 5);
-  document.getElementById('taxa10').classList.toggle('active', pct === 10);
-  launderPreview();
-}
-
-function launderPreview() {
-  const amt = parseFloat(document.getElementById('launderAmt').value) || 0;
-  const hint = document.getElementById('amountHint');
-
-  if (amt > 0 && amt < 50000) {
-    hint.innerHTML = '⚠ Suma minimă este <b>$50,000</b>';
-    hint.style.color = 'var(--danger)';
-  } else if (amt >= 50000) {
-    hint.innerHTML = '✓ Sumă validă: <b>' + fmt(amt) + '</b>';
-    hint.style.color = 'var(--acc)';
+function lPreview() {
+  const a=parseFloat(document.getElementById('lAmt').value)||0;
+  const h=document.getElementById('lHint');
+  if(a>0&&a<50000){h.innerHTML='⚠ Suma minimă este <b>$50,000</b>';h.style.color='var(--danger)';}
+  else if(a>=50000){h.innerHTML='✓ Sumă validă: <b>'+fmtD(a)+'</b>';h.style.color='var(--acc)';}
+  else{h.innerHTML='Introdu minim <b>$50,000</b>';h.style.color='';}
+  if(a>=50000){
+    document.getElementById('tv5').textContent='— '+fmtD(a*.05)+' taxă';
+    document.getElementById('tv10').textContent='— '+fmtD(a*.10)+' taxă';
   } else {
-    hint.innerHTML = 'Introdu minim <b>$50,000</b>';
-    hint.style.color = '';
-  }
-
-  // live update taxa values
-  if (amt >= 50000) {
-    document.getElementById('taxaVal5').textContent  = '— ' + fmt(amt * 0.05)  + ' taxă';
-    document.getElementById('taxaVal10').textContent = '— ' + fmt(amt * 0.10) + ' taxă';
-  } else {
-    document.getElementById('taxaVal5').textContent  = '— $0';
-    document.getElementById('taxaVal10').textContent = '— $0';
+    document.getElementById('tv5').textContent='— $0';
+    document.getElementById('tv10').textContent='— $0';
   }
 }
-
-function calcLaunder() {
-  const amt = parseFloat(document.getElementById('launderAmt').value) || 0;
-
-  if (amt < 50000) {
-    document.getElementById('amountHint').innerHTML = '⛔ Suma minimă este <b>$50,000</b>!';
-    document.getElementById('amountHint').style.color = 'var(--danger)';
-    document.getElementById('launderAmt').focus();
-    return;
-  }
-  if (!selectedTaxa) {
-    alert('Selectează taxa: 5% sau 10%');
-    return;
-  }
-
-  const taxa  = amt * (selectedTaxa / 100);
-  const clean = amt - taxa;
-
-  document.getElementById('resDirty').textContent = fmt(amt);
-  document.getElementById('resTaxa').textContent  = fmt(taxa);
-  document.getElementById('resPct').textContent   = selectedTaxa + '%';
-  document.getElementById('resClean').textContent = fmt(clean);
-  document.getElementById('resSub').textContent   =
-    'Din ' + fmt(amt) + ' murdar → ' + fmt(clean) + ' curat · taxă ' + selectedTaxa + '%';
-
-  document.getElementById('launderResult').classList.add('show');
-  document.getElementById('launderResult').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+function lCalc() {
+  const a=parseFloat(document.getElementById('lAmt').value)||0;
+  if(a<50000){document.getElementById('lHint').innerHTML='⛔ Suma minimă este <b>$50,000</b>!';document.getElementById('lHint').style.color='var(--danger)';return;}
+  if(!selTaxa){alert('Selectează taxa: 5% sau 10%');return;}
+  const taxa=a*(selTaxa/100), clean=a-taxa;
+  document.getElementById('rDirty').textContent=fmtD(a);
+  document.getElementById('rTaxa').textContent=fmtD(taxa);
+  document.getElementById('rPct').textContent=selTaxa+'%';
+  document.getElementById('rClean').textContent=fmtD(clean);
+  document.getElementById('rSub').textContent='Din '+fmtD(a)+' murdar → '+fmtD(clean)+' curat · taxă '+selTaxa+'%';
+  document.getElementById('lResult').classList.add('show');
+  document.getElementById('lResult').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function lReset() {
+  document.getElementById('lAmt').value='';
+  selTaxa=null;
+  document.getElementById('t5').classList.remove('active');
+  document.getElementById('t10').classList.remove('active');
+  document.getElementById('tv5').textContent='— $0';
+  document.getElementById('tv10').textContent='— $0';
+  document.getElementById('lHint').innerHTML='Introdu minim <b>$50,000</b>';
+  document.getElementById('lHint').style.color='';
+  document.getElementById('lResult').classList.remove('show');
 }
 
-function resetLaunder() {
-  document.getElementById('launderAmt').value = '';
-  selectedTaxa = null;
-  document.getElementById('taxa5').classList.remove('active');
-  document.getElementById('taxa10').classList.remove('active');
-  document.getElementById('taxaVal5').textContent  = '— $0';
-  document.getElementById('taxaVal10').textContent = '— $0';
-  document.getElementById('amountHint').innerHTML  = 'Introdu minim <b>$50,000</b>';
-  document.getElementById('amountHint').style.color = '';
-  document.getElementById('launderResult').classList.remove('show');
+// ════════════════════════════════
+//  MUNITIE DATA
+// ════════════════════════════════
+const AMMO = [
+  {id:'a01',code:'A-01',name:'Pistol',                 cat:'Pistol',  praf:10},
+  {id:'a02',code:'A-02',name:'Combat Pistol',          cat:'Pistol',  praf:10},
+  {id:'a03',code:'A-03',name:'Pistol MK2',             cat:'Pistol',  praf:13},
+  {id:'a04',code:'A-04',name:'Ceramic Pistol',         cat:'Pistol',  praf:13},
+  {id:'a05',code:'A-05',name:'Pistol XM3',             cat:'Pistol',  praf:13},
+  {id:'a16',code:'A-06',name:'Vintage Pistol',         cat:'Pistol',  praf:15},
+  {id:'a06',code:'A-07',name:'TEC-9',                  cat:'SMG',     praf:15},
+  {id:'a07',code:'A-08',name:'Micro SMG',              cat:'SMG',     praf:15},
+  {id:'a08',code:'A-09',name:'Mini-SMG',               cat:'SMG',     praf:15},
+  {id:'a09',code:'A-10',name:'TEC-Pistol',             cat:'SMG',     praf:18},
+  {id:'a10',code:'A-11',name:'SMG',                    cat:'SMG',     praf:18},
+  {id:'a11',code:'A-12',name:'Combat PDW',             cat:'SMG',     praf:18},
+  {id:'a22',code:'A-13',name:'Gusenberg',              cat:'SMG',     praf:18},
+  {id:'a12',code:'A-14',name:'Assault Rifle',          cat:'Rifle',   praf:25},
+  {id:'a13',code:'A-15',name:'Compact Rifle',          cat:'Rifle',   praf:25},
+  {id:'a14',code:'A-16',name:'Carabine Rifle',         cat:'Rifle',   praf:30},
+  {id:'a15',code:'A-17',name:'Advanced Rifle',         cat:'Rifle',   praf:30},
+  {id:'a18',code:'A-18',name:'Assault Rifle MK2',      cat:'Rifle',   praf:30},
+  {id:'a19',code:'A-19',name:'Heavy Rifle',            cat:'Rifle',   praf:30},
+  {id:'a20',code:'A-20',name:'Combat MG',              cat:'MG',      praf:30},
+  {id:'a21',code:'A-21',name:'MG',                     cat:'MG',      praf:30},
+  {id:'a17',code:'A-22',name:'Double Action Revolver', cat:'Revolver',praf:50},
+  {id:'a23',code:'A-23',name:'Navy Revolver',          cat:'Revolver',praf:50},
+];
+const A_CATS = ['Toate',...new Set(AMMO.map(a=>a.cat))];
+let selA=null, aCat='Toate';
+
+function aInit() {
+  const strip=document.getElementById('aCatStrip');
+  A_CATS.forEach(c=>{
+    const b=document.createElement('button');
+    b.className='acat-btn'+(c===aCat?' active':'');
+    b.textContent=c;
+    b.onclick=()=>{aCat=c;document.querySelectorAll('.acat-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');aFilter();};
+    strip.appendChild(b);
+  });
+  const list=document.getElementById('aList');
+  AMMO.forEach(a=>{
+    const r=document.createElement('div');
+    r.className='a-row'; r.id='ar_'+a.id; r.dataset.cat=a.cat;
+    r.innerHTML=`<div class="a-code">${a.code}</div><div class="a-info"><div class="a-name">${a.name}</div><div class="a-cat">${a.cat}</div></div><div class="a-praf">${a.praf}×🔹</div>`;
+    r.onclick=()=>aSel(a.id);
+    list.appendChild(r);
+  });
+  document.getElementById('aCount').textContent=AMMO.length+' / '+AMMO.length;
+}
+
+function aFilter() {
+  let v=0;
+  document.querySelectorAll('.a-row').forEach(r=>{const ok=aCat==='Toate'||r.dataset.cat===aCat;r.classList.toggle('hidden',!ok);if(ok)v++;});
+  document.getElementById('aCount').textContent=v+' / '+AMMO.length;
+}
+
+function aSel(id) {
+  selA=id;
+  document.querySelectorAll('.a-row').forEach(r=>r.classList.toggle('active',r.id==='ar_'+id));
+  const a=AMMO.find(x=>x.id===id);
+  document.getElementById('aHero').innerHTML=`
+    <div><div class="a-hero-name">${a.name}</div><div class="a-hero-cat">${a.cat} · ${a.code}</div></div>
+    <div class="a-rate"><div class="a-rate-v">${a.praf}×</div><div class="a-rate-l">PRAF / 10 MUNITIE</div></div>`;
+  document.querySelectorAll('.a-preset').forEach(b=>b.classList.remove('sel'));
+  document.getElementById('aEmpty').style.display='none';
+  document.getElementById('aDetail').classList.add('show');
+  aCalc();
+}
+
+function aSetQty(v) {
+  document.getElementById('aQty').value=v;
+  document.querySelectorAll('.a-preset').forEach(b=>b.classList.toggle('sel',parseInt(b.textContent)===v));
+  aCalc();
+}
+function aQty(d) {
+  const inp=document.getElementById('aQty');
+  const v=Math.max(1,(parseInt(inp.value)||0)+d);
+  inp.value=v;
+  document.querySelectorAll('.a-preset').forEach(b=>b.classList.toggle('sel',parseInt(b.textContent)===v));
+  aCalc();
+}
+
+function aCalc() {
+  if(!selA) return;
+  const a=AMMO.find(x=>x.id===selA);
+  const qty=Math.max(1,parseInt(document.getElementById('aQty').value)||1);
+  const loturi=Math.ceil(qty/10);
+  const total=loturi*a.praf;
+  const rest=qty%10;
+  document.getElementById('aRQ').textContent=qty.toLocaleString('ro-RO');
+  document.getElementById('aRL').textContent=loturi.toLocaleString('ro-RO');
+  document.getElementById('aRP').textContent=a.praf;
+  document.getElementById('aTotal').textContent=total.toLocaleString('ro-RO');
+  document.getElementById('aSub').textContent=qty+' mun. '+a.name+' → '+loturi+' lot'+(loturi!==1?'uri':'')+' × '+a.praf+' praf = '+total+' Praf de Pușcă';
+  const w=document.getElementById('aWarn');
+  if(rest!==0){
+    w.style.display='flex';
+    document.getElementById('aWarnTxt').textContent='Ultimul lot are doar '+rest+' muniții (din 10). Se consumă tot '+a.praf+' Praf de Pușcă per lot.';
+  } else { w.style.display='none'; }
+}
+
+function aReset() {
+  selA=null;
+  document.querySelectorAll('.a-row').forEach(r=>r.classList.remove('active'));
+  aCat='Toate';
+  document.querySelectorAll('.acat-btn').forEach(b=>b.classList.toggle('active',b.textContent==='Toate'));
+  aFilter();
+  document.getElementById('aQty').value='100';
+  document.querySelectorAll('.a-preset').forEach(b=>b.classList.remove('sel'));
+  document.getElementById('aEmpty').style.display='';
+  document.getElementById('aDetail').classList.remove('show');
+  document.getElementById('aWarn').style.display='none';
 }
 
 // ── INIT ──
-wcEnsureInit();
-
-// ════════════════════════════════════════
-//  AMMO CALCULATOR
-// ════════════════════════════════════════
-const AMMO_DATA = [
-  // Pistol
-  { id:'a01', code:'A-01', name:'Pistol',                  cat:'Pistol',    praf:10 },
-  { id:'a02', code:'A-02', name:'Combat Pistol',           cat:'Pistol',    praf:10 },
-  { id:'a03', code:'A-03', name:'Pistol MK2',              cat:'Pistol',    praf:13 },
-  { id:'a04', code:'A-04', name:'Ceramic Pistol',          cat:'Pistol',    praf:13 },
-  { id:'a05', code:'A-05', name:'Pistol XM3',              cat:'Pistol',    praf:13 },
-  { id:'a16', code:'A-16', name:'Vintage Pistol',          cat:'Pistol',    praf:15 },
-  // SMG
-  { id:'a06', code:'A-06', name:'TEC-9',                   cat:'SMG',       praf:15 },
-  { id:'a07', code:'A-07', name:'Micro SMG',               cat:'SMG',       praf:15 },
-  { id:'a08', code:'A-08', name:'Mini-SMG',                cat:'SMG',       praf:15 },
-  { id:'a09', code:'A-09', name:'TEC-Pistol',              cat:'SMG',       praf:18 },
-  { id:'a10', code:'A-10', name:'SMG',                     cat:'SMG',       praf:18 },
-  { id:'a11', code:'A-11', name:'Combat PDW',              cat:'SMG',       praf:18 },
-  { id:'a22', code:'A-22', name:'Gusenberg',               cat:'SMG',       praf:18 },
-  // Rifle
-  { id:'a12', code:'A-12', name:'Assault Rifle',           cat:'Rifle',     praf:25 },
-  { id:'a13', code:'A-13', name:'Compact Rifle',           cat:'Rifle',     praf:25 },
-  { id:'a14', code:'A-14', name:'Carabine Rifle',          cat:'Rifle',     praf:30 },
-  { id:'a15', code:'A-15', name:'Advanced Rifle',          cat:'Rifle',     praf:30 },
-  { id:'a18', code:'A-18', name:'Assault Rifle MK2',       cat:'Rifle',     praf:30 },
-  { id:'a19', code:'A-19', name:'Heavy Rifle',             cat:'Rifle',     praf:30 },
-  // MG
-  { id:'a20', code:'A-20', name:'Combat MG',               cat:'MG',        praf:30 },
-  { id:'a21', code:'A-21', name:'MG',                      cat:'MG',        praf:30 },
-  // Revolver
-  { id:'a17', code:'A-17', name:'Double Action Revolver',  cat:'Revolver',  praf:50 },
-  { id:'a23', code:'A-23', name:'Navy Revolver',           cat:'Revolver',  praf:50 },
-];
-
-const AMMO_CATS = ['Toate', ...new Set(AMMO_DATA.map(a => a.cat))];
-let selectedAmmo = null;
-let ammoCat = 'Toate';
-
-function buildAmmoCats() {
-  const strip = document.getElementById('ammoCatStrip');
-  AMMO_CATS.forEach(c => {
-    const b = document.createElement('button');
-    b.className = 'ammo-cat-btn' + (c === ammoCat ? ' active' : '');
-    b.textContent = c;
-    b.onclick = () => {
-      ammoCat = c;
-      document.querySelectorAll('.ammo-cat-btn').forEach(x => x.classList.remove('active'));
-      b.classList.add('active');
-      filterAmmo();
-    };
-    strip.appendChild(b);
-  });
-}
-
-function filterAmmo() {
-  let vis = 0;
-  document.querySelectorAll('.ammo-row').forEach(r => {
-    const show = ammoCat === 'Toate' || r.dataset.cat === ammoCat;
-    r.classList.toggle('hidden', !show);
-    if (show) vis++;
-  });
-  document.getElementById('ammoCount').textContent = vis + ' / ' + AMMO_DATA.length;
-}
-
-function buildAmmoList() {
-  const list = document.getElementById('ammoList');
-  AMMO_DATA.forEach(a => {
-    const row = document.createElement('div');
-    row.className = 'ammo-row';
-    row.id = 'ar_' + a.id;
-    row.dataset.cat = a.cat;
-    row.innerHTML = `
-      <div class="ammo-row-num">${a.code}</div>
-      <div class="ammo-row-info">
-        <div class="ammo-row-name">${a.name}</div>
-        <div class="ammo-row-cat">${a.cat}</div>
-      </div>
-      <div class="ammo-row-praf">${a.praf}x🔹</div>`;
-    row.onclick = () => selectAmmo(a.id);
-    list.appendChild(row);
-  });
-  document.getElementById('ammoCount').textContent = AMMO_DATA.length + ' / ' + AMMO_DATA.length;
-}
-
-function selectAmmo(id) {
-  selectedAmmo = id;
-  document.querySelectorAll('.ammo-row').forEach(r =>
-    r.classList.toggle('active', r.id === 'ar_' + id)
-  );
-  const a = AMMO_DATA.find(x => x.id === id);
-  document.getElementById('ammoHero').innerHTML = `
-    <div>
-      <div class="ammo-hero-name">${a.name}</div>
-      <div class="ammo-hero-cat">${a.cat} · ${a.code}</div>
-    </div>
-    <div class="ammo-rate-box">
-      <div class="ammo-rate-val">${a.praf}×</div>
-      <div class="ammo-rate-lbl">PRAF / 10 MUNITIE</div>
-    </div>`;
-  // reset presets
-  document.querySelectorAll('.ammo-preset-btn').forEach(b => b.classList.remove('selected'));
-  document.getElementById('ammoEmptyPanel').style.display = 'none';
-  document.getElementById('ammoDetail').classList.add('show');
-  ammoCalc();
-}
-
-function ammoSetQty(v) {
-  document.getElementById('ammoQty').value = v;
-  document.querySelectorAll('.ammo-preset-btn').forEach(b =>
-    b.classList.toggle('selected', parseInt(b.textContent) === v)
-  );
-  ammoCalc();
-}
-
-function ammoChangeQty(d) {
-  const inp = document.getElementById('ammoQty');
-  const v = Math.max(1, (parseInt(inp.value) || 0) + d);
-  inp.value = v;
-  // sync preset highlight
-  document.querySelectorAll('.ammo-preset-btn').forEach(b =>
-    b.classList.toggle('selected', parseInt(b.textContent) === v)
-  );
-  ammoCalc();
-}
-
-function ammoCalc() {
-  if (!selectedAmmo) return;
-  const a    = AMMO_DATA.find(x => x.id === selectedAmmo);
-  const qty  = Math.max(1, parseInt(document.getElementById('ammoQty').value) || 1);
-  // 10 munitie = a.praf
-  const loturi   = Math.ceil(qty / 10);
-  const prafTotal = loturi * a.praf;
-  const remainder = qty % 10; // cate munitii raman intr-un lot incomplet
-
-  document.getElementById('ammoResQty').textContent    = qty.toLocaleString('ro-RO');
-  document.getElementById('ammoResLoturi').textContent = loturi.toLocaleString('ro-RO');
-  document.getElementById('ammoResPrafLot').textContent= a.praf;
-  document.getElementById('ammoResPraf').textContent   = prafTotal.toLocaleString('ro-RO');
-  document.getElementById('ammoResSub').textContent    =
-    qty + ' mun. ' + a.name + ' → ' + loturi + ' lot' + (loturi !== 1 ? 'uri' : '') + ' × ' + a.praf + ' praf = ' + prafTotal + ' Praf de Pușcă';
-
-  const remEl = document.getElementById('ammoRemainder');
-  const remTxt = document.getElementById('ammoRemText');
-  if (remainder !== 0) {
-    remEl.style.display = 'flex';
-    remTxt.textContent  =
-      'Ultimul lot are doar ' + remainder + ' muniții (din 10). Consumul de ' + a.praf + ' Praf este același per lot.';
-  } else {
-    remEl.style.display = 'none';
-  }
-}
-
-function resetAmmo() {
-  selectedAmmo = null;
-  document.querySelectorAll('.ammo-row').forEach(r => r.classList.remove('active'));
-  ammoCat = 'Toate';
-  document.querySelectorAll('.ammo-cat-btn').forEach(b =>
-    b.classList.toggle('active', b.textContent === 'Toate')
-  );
-  filterAmmo();
-  document.getElementById('ammoQty').value = '100';
-  document.querySelectorAll('.ammo-preset-btn').forEach(b => b.classList.remove('selected'));
-  document.getElementById('ammoEmptyPanel').style.display = '';
-  document.getElementById('ammoDetail').classList.remove('show');
-}
-
-buildAmmoCats();
-buildAmmoList();
+wInit();
+aInit();
 </script>
 </body>
 </html>

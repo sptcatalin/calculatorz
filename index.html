@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SPT TOOLS — </title>
+<title>SPT TOOLS — SpartanRP</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -389,8 +389,86 @@ body::after{
   .weapon-hero,.controls-pad,.attach-wrap,.mats-wrap{padding-left:16px;padding-right:16px;}
   .mats-grid{grid-template-columns:1fr 1fr;}
   .nav-btn{padding:12px 16px;font-size:13px;}
+  .ammo-layout{grid-template-columns:1fr;}
+  .ammo-res-top{flex-direction:column;}
 }
-</style>
+
+/* ════════════════════════════════════════
+   AMMO CALCULATOR
+════════════════════════════════════════ */
+.ammo-layout{display:grid;grid-template-columns:320px 1fr;gap:20px;align-items:start;}
+@media(max-width:840px){.ammo-layout{grid-template-columns:1fr;}}
+.ammo-left-panel{position:sticky;top:20px;}
+
+.ammo-cat-strip{display:flex;flex-wrap:wrap;gap:0;border-bottom:1px solid var(--line);}
+.ammo-cat-btn{
+  padding:8px 10px;background:none;border:none;border-right:1px solid var(--line);
+  color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;
+  cursor:pointer;transition:all .12s;text-transform:uppercase;flex:1;min-width:55px;text-align:center;
+}
+.ammo-cat-btn:last-child{border-right:none;}
+.ammo-cat-btn:hover{background:rgba(0,230,180,.04);color:var(--text);}
+.ammo-cat-btn.active{background:rgba(0,230,180,.08);color:var(--acc);border-bottom:2px solid var(--acc);}
+
+.ammo-list{max-height:520px;overflow-y:auto;padding:4px 0;}
+.ammo-row{display:flex;align-items:center;border-bottom:1px solid rgba(255,255,255,.025);cursor:pointer;transition:background .1s;position:relative;}
+.ammo-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--acc2);transform:scaleY(0);transition:transform .12s;}
+.ammo-row:hover{background:rgba(0,201,255,.03);}
+.ammo-row.active{background:rgba(0,201,255,.07);}
+.ammo-row.active::before{transform:scaleY(1);}
+.ammo-row.hidden{display:none;}
+.ammo-row-num{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dim);padding:12px 10px;min-width:36px;text-align:center;border-right:1px solid var(--line);}
+.ammo-row.active .ammo-row-num{color:var(--acc2);}
+.ammo-row-info{padding:12px 14px;flex:1;}
+.ammo-row-name{font-size:13px;font-weight:800;color:var(--text);text-transform:uppercase;line-height:1;letter-spacing:.3px;}
+.ammo-row.active .ammo-row-name{color:var(--acc2);}
+.ammo-row-cat{font-size:10px;font-weight:600;letter-spacing:2px;color:var(--muted);margin-top:2px;}
+.ammo-row-praf{padding:12px 12px;font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--dim);white-space:nowrap;}
+.ammo-row.active .ammo-row-praf{color:var(--acc);}
+
+.ammo-right{display:flex;flex-direction:column;gap:16px;}
+.ammo-detail{display:none;flex-direction:column;gap:16px;}
+.ammo-detail.show{display:flex;}
+
+.ammo-hero{padding:20px 24px;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.ammo-hero-name{font-family:'Bebas Neue',sans-serif;font-size:38px;line-height:1;color:var(--white);letter-spacing:1px;}
+.ammo-hero-cat{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--acc2);margin-top:4px;}
+.ammo-rate-box{background:rgba(0,201,255,.08);border:1px solid rgba(0,201,255,.25);border-radius:2px;padding:8px 14px;text-align:center;}
+.ammo-rate-val{font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1;color:var(--acc2);}
+.ammo-rate-lbl{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);margin-top:2px;}
+
+.ammo-presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;}
+.ammo-preset-btn{
+  padding:8px 18px;background:rgba(0,201,255,.07);border:1px solid rgba(0,201,255,.2);
+  border-radius:2px;color:var(--acc2);font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;
+  cursor:pointer;transition:all .12s;
+}
+.ammo-preset-btn:hover{background:rgba(0,201,255,.15);border-color:var(--acc2);}
+.ammo-preset-btn.selected{background:var(--acc2);color:#000;border-color:var(--acc2);}
+
+.ammo-result{padding:22px 24px;}
+.ammo-res-top{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:20px;}
+.ammo-res-box{background:rgba(0,0,0,.4);border:1px solid var(--line);border-radius:2px;padding:14px 18px;text-align:center;min-width:100px;}
+.ammo-res-label{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;}
+.ammo-res-val{font-family:'Bebas Neue',sans-serif;font-size:30px;line-height:1;color:var(--text);}
+.ammo-res-val.acc{color:var(--acc);}
+.ammo-res-val.cyan{color:var(--acc2);}
+.ammo-res-arrow{font-family:'Share Tech Mono',monospace;font-size:18px;color:var(--dim);}
+
+.ammo-big-result{
+  background:rgba(0,0,0,.5);border:1px solid rgba(0,201,255,.2);
+  border-radius:2px;padding:22px;text-align:center;
+  position:relative;overflow:hidden;margin-bottom:14px;
+}
+.ammo-big-result::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 100%,rgba(0,201,255,.06),transparent);}
+
+.ammo-remainder{
+  background:rgba(232,180,0,.06);border:1px solid rgba(232,180,0,.2);border-left:3px solid #e8b400;
+  border-radius:2px;padding:12px 16px;
+  font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:1.5px;color:#c89800;
+  display:flex;align-items:center;gap:10px;
+}
+.ammo-rem-icon{font-size:16px;}
 </head>
 <body>
 
@@ -402,7 +480,7 @@ body::after{
   <!-- ─ HEADER ─ -->
   <header class="hdr">
     <div>
-      <div class="hdr-tag">// SPT· TOOL SUITE · </div>
+      <div class="hdr-tag">// SPARTANRP · TOOL SUITE · v3.0</div>
       <div class="hdr-title">SPT<br><span>TOOLS</span></div>
     </div>
     <div class="hdr-right">
@@ -418,6 +496,9 @@ body::after{
     </button>
     <button class="nav-btn" onclick="switchSection('bani',this)">
       <span class="nb-ic">💵</span>SPĂLARE BANI
+    </button>
+    <button class="nav-btn" onclick="switchSection('munitie',this)">
+      <span class="nb-ic">🔹</span>MUNIȚIE
     </button>
   </nav>
 
@@ -556,6 +637,108 @@ body::after{
 
     </div>
   </div>
+
+</div><!-- /wrap -->
+
+  <!-- ══════════════════════════════════
+       SECTION: MUNITIE
+  ══════════════════════════════════ -->
+  <div class="section" id="sec-munitie">
+    <div class="ammo-layout">
+
+      <!-- LEFT: categorie + lista -->
+      <div class="panel ammo-left-panel">
+        <div class="panel-hdr">
+          <span class="panel-label">Tip muniție</span>
+          <span class="panel-num" id="ammoCount"></span>
+        </div>
+        <div class="ammo-cat-strip" id="ammoCatStrip"></div>
+        <div class="ammo-list" id="ammoList"></div>
+      </div>
+
+      <!-- RIGHT: calculator -->
+      <div class="ammo-right">
+
+        <!-- Stare goală -->
+        <div class="panel" id="ammoEmptyPanel">
+          <div class="empty-state">
+            <div class="empty-icon">🔹</div>
+            <div class="empty-text">Nicio muniție selectată<br>Alege din lista din stânga<br>pentru a calcula Praful de Pușcă</div>
+          </div>
+        </div>
+
+        <!-- Calculator activ -->
+        <div class="ammo-detail" id="ammoDetail">
+
+          <!-- Hero tip muniție -->
+          <div class="panel">
+            <div class="ammo-hero" id="ammoHero"></div>
+          </div>
+
+          <!-- Input cantitate + presets -->
+          <div class="panel">
+            <div class="controls-pad">
+              <div class="lc-title">Cantitate de muniție dorită</div>
+
+              <!-- Presets -->
+              <div class="ammo-presets" id="ammoPresets">
+                <button class="ammo-preset-btn" onclick="ammoSetQty(10)">10</button>
+                <button class="ammo-preset-btn" onclick="ammoSetQty(50)">50</button>
+                <button class="ammo-preset-btn" onclick="ammoSetQty(100)">100</button>
+                <button class="ammo-preset-btn" onclick="ammoSetQty(250)">250</button>
+                <button class="ammo-preset-btn" onclick="ammoSetQty(500)">500</button>
+                <button class="ammo-preset-btn" onclick="ammoSetQty(1000)">1000</button>
+              </div>
+
+              <div class="ctrl-row" style="margin-top:14px;">
+                <span class="ctrl-label">CUSTOM</span>
+                <div class="qty-control">
+                  <button class="qty-btn" onclick="ammoChangeQty(-10)">−</button>
+                  <input class="qty-input" id="ammoQty" type="number" value="100" min="1" oninput="ammoCalc()">
+                  <button class="qty-btn" onclick="ammoChangeQty(10)">+</button>
+                </div>
+                <button class="btn-reset" onclick="resetAmmo()">⟳ RESET</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rezultat -->
+          <div class="panel">
+            <div class="ammo-result" id="ammoResult">
+              <div class="ammo-res-top">
+                <div class="ammo-res-box">
+                  <div class="ammo-res-label">MUNIȚIE</div>
+                  <div class="ammo-res-val acc" id="ammoResQty">—</div>
+                </div>
+                <div class="ammo-res-arrow">→</div>
+                <div class="ammo-res-box">
+                  <div class="ammo-res-label">LOTURI DE 10</div>
+                  <div class="ammo-res-val cyan" id="ammoResLoturi">—</div>
+                </div>
+                <div class="ammo-res-arrow">×</div>
+                <div class="ammo-res-box">
+                  <div class="ammo-res-label">PRAF / LOT</div>
+                  <div class="ammo-res-val" id="ammoResPrafLot">—</div>
+                </div>
+              </div>
+
+              <div class="ammo-big-result">
+                <div class="res-big-label">💥 PRAF DE PUȘCĂ NECESAR</div>
+                <div class="res-big-value" id="ammoResPraf">—</div>
+                <div class="res-big-sub" id="ammoResSub"></div>
+              </div>
+
+              <div class="ammo-remainder" id="ammoRemainder" style="display:none;">
+                <span class="ammo-rem-icon">⚠</span>
+                <span id="ammoRemText"></span>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /ammo-detail -->
+      </div><!-- /ammo-right -->
+    </div><!-- /ammo-layout -->
+  </div><!-- /sec-munitie -->
 
 </div><!-- /wrap -->
 
@@ -806,6 +989,175 @@ function resetLaunder() {
 
 // ── INIT ──
 wcEnsureInit();
+
+// ════════════════════════════════════════
+//  AMMO CALCULATOR
+// ════════════════════════════════════════
+const AMMO_DATA = [
+  // Pistol
+  { id:'a01', code:'A-01', name:'Pistol',                  cat:'Pistol',    praf:10 },
+  { id:'a02', code:'A-02', name:'Combat Pistol',           cat:'Pistol',    praf:10 },
+  { id:'a03', code:'A-03', name:'Pistol MK2',              cat:'Pistol',    praf:13 },
+  { id:'a04', code:'A-04', name:'Ceramic Pistol',          cat:'Pistol',    praf:13 },
+  { id:'a05', code:'A-05', name:'Pistol XM3',              cat:'Pistol',    praf:13 },
+  { id:'a16', code:'A-16', name:'Vintage Pistol',          cat:'Pistol',    praf:15 },
+  // SMG
+  { id:'a06', code:'A-06', name:'TEC-9',                   cat:'SMG',       praf:15 },
+  { id:'a07', code:'A-07', name:'Micro SMG',               cat:'SMG',       praf:15 },
+  { id:'a08', code:'A-08', name:'Mini-SMG',                cat:'SMG',       praf:15 },
+  { id:'a09', code:'A-09', name:'TEC-Pistol',              cat:'SMG',       praf:18 },
+  { id:'a10', code:'A-10', name:'SMG',                     cat:'SMG',       praf:18 },
+  { id:'a11', code:'A-11', name:'Combat PDW',              cat:'SMG',       praf:18 },
+  { id:'a22', code:'A-22', name:'Gusenberg',               cat:'SMG',       praf:18 },
+  // Rifle
+  { id:'a12', code:'A-12', name:'Assault Rifle',           cat:'Rifle',     praf:25 },
+  { id:'a13', code:'A-13', name:'Compact Rifle',           cat:'Rifle',     praf:25 },
+  { id:'a14', code:'A-14', name:'Carabine Rifle',          cat:'Rifle',     praf:30 },
+  { id:'a15', code:'A-15', name:'Advanced Rifle',          cat:'Rifle',     praf:30 },
+  { id:'a18', code:'A-18', name:'Assault Rifle MK2',       cat:'Rifle',     praf:30 },
+  { id:'a19', code:'A-19', name:'Heavy Rifle',             cat:'Rifle',     praf:30 },
+  // MG
+  { id:'a20', code:'A-20', name:'Combat MG',               cat:'MG',        praf:30 },
+  { id:'a21', code:'A-21', name:'MG',                      cat:'MG',        praf:30 },
+  // Revolver
+  { id:'a17', code:'A-17', name:'Double Action Revolver',  cat:'Revolver',  praf:50 },
+  { id:'a23', code:'A-23', name:'Navy Revolver',           cat:'Revolver',  praf:50 },
+];
+
+const AMMO_CATS = ['Toate', ...new Set(AMMO_DATA.map(a => a.cat))];
+let selectedAmmo = null;
+let ammoCat = 'Toate';
+
+function buildAmmoCats() {
+  const strip = document.getElementById('ammoCatStrip');
+  AMMO_CATS.forEach(c => {
+    const b = document.createElement('button');
+    b.className = 'ammo-cat-btn' + (c === ammoCat ? ' active' : '');
+    b.textContent = c;
+    b.onclick = () => {
+      ammoCat = c;
+      document.querySelectorAll('.ammo-cat-btn').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      filterAmmo();
+    };
+    strip.appendChild(b);
+  });
+}
+
+function filterAmmo() {
+  let vis = 0;
+  document.querySelectorAll('.ammo-row').forEach(r => {
+    const show = ammoCat === 'Toate' || r.dataset.cat === ammoCat;
+    r.classList.toggle('hidden', !show);
+    if (show) vis++;
+  });
+  document.getElementById('ammoCount').textContent = vis + ' / ' + AMMO_DATA.length;
+}
+
+function buildAmmoList() {
+  const list = document.getElementById('ammoList');
+  AMMO_DATA.forEach(a => {
+    const row = document.createElement('div');
+    row.className = 'ammo-row';
+    row.id = 'ar_' + a.id;
+    row.dataset.cat = a.cat;
+    row.innerHTML = `
+      <div class="ammo-row-num">${a.code}</div>
+      <div class="ammo-row-info">
+        <div class="ammo-row-name">${a.name}</div>
+        <div class="ammo-row-cat">${a.cat}</div>
+      </div>
+      <div class="ammo-row-praf">${a.praf}x🔹</div>`;
+    row.onclick = () => selectAmmo(a.id);
+    list.appendChild(row);
+  });
+  document.getElementById('ammoCount').textContent = AMMO_DATA.length + ' / ' + AMMO_DATA.length;
+}
+
+function selectAmmo(id) {
+  selectedAmmo = id;
+  document.querySelectorAll('.ammo-row').forEach(r =>
+    r.classList.toggle('active', r.id === 'ar_' + id)
+  );
+  const a = AMMO_DATA.find(x => x.id === id);
+  document.getElementById('ammoHero').innerHTML = `
+    <div>
+      <div class="ammo-hero-name">${a.name}</div>
+      <div class="ammo-hero-cat">${a.cat} · ${a.code}</div>
+    </div>
+    <div class="ammo-rate-box">
+      <div class="ammo-rate-val">${a.praf}×</div>
+      <div class="ammo-rate-lbl">PRAF / 10 MUNITIE</div>
+    </div>`;
+  // reset presets
+  document.querySelectorAll('.ammo-preset-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('ammoEmptyPanel').style.display = 'none';
+  document.getElementById('ammoDetail').classList.add('show');
+  ammoCalc();
+}
+
+function ammoSetQty(v) {
+  document.getElementById('ammoQty').value = v;
+  document.querySelectorAll('.ammo-preset-btn').forEach(b =>
+    b.classList.toggle('selected', parseInt(b.textContent) === v)
+  );
+  ammoCalc();
+}
+
+function ammoChangeQty(d) {
+  const inp = document.getElementById('ammoQty');
+  const v = Math.max(1, (parseInt(inp.value) || 0) + d);
+  inp.value = v;
+  // sync preset highlight
+  document.querySelectorAll('.ammo-preset-btn').forEach(b =>
+    b.classList.toggle('selected', parseInt(b.textContent) === v)
+  );
+  ammoCalc();
+}
+
+function ammoCalc() {
+  if (!selectedAmmo) return;
+  const a    = AMMO_DATA.find(x => x.id === selectedAmmo);
+  const qty  = Math.max(1, parseInt(document.getElementById('ammoQty').value) || 1);
+  // 10 munitie = a.praf
+  const loturi   = Math.ceil(qty / 10);
+  const prafTotal = loturi * a.praf;
+  const remainder = qty % 10; // cate munitii raman intr-un lot incomplet
+
+  document.getElementById('ammoResQty').textContent    = qty.toLocaleString('ro-RO');
+  document.getElementById('ammoResLoturi').textContent = loturi.toLocaleString('ro-RO');
+  document.getElementById('ammoResPrafLot').textContent= a.praf;
+  document.getElementById('ammoResPraf').textContent   = prafTotal.toLocaleString('ro-RO');
+  document.getElementById('ammoResSub').textContent    =
+    qty + ' mun. ' + a.name + ' → ' + loturi + ' lot' + (loturi !== 1 ? 'uri' : '') + ' × ' + a.praf + ' praf = ' + prafTotal + ' Praf de Pușcă';
+
+  const remEl = document.getElementById('ammoRemainder');
+  const remTxt = document.getElementById('ammoRemText');
+  if (remainder !== 0) {
+    remEl.style.display = 'flex';
+    remTxt.textContent  =
+      'Ultimul lot are doar ' + remainder + ' muniții (din 10). Consumul de ' + a.praf + ' Praf este același per lot.';
+  } else {
+    remEl.style.display = 'none';
+  }
+}
+
+function resetAmmo() {
+  selectedAmmo = null;
+  document.querySelectorAll('.ammo-row').forEach(r => r.classList.remove('active'));
+  ammoCat = 'Toate';
+  document.querySelectorAll('.ammo-cat-btn').forEach(b =>
+    b.classList.toggle('active', b.textContent === 'Toate')
+  );
+  filterAmmo();
+  document.getElementById('ammoQty').value = '100';
+  document.querySelectorAll('.ammo-preset-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('ammoEmptyPanel').style.display = '';
+  document.getElementById('ammoDetail').classList.remove('show');
+}
+
+buildAmmoCats();
+buildAmmoList();
 </script>
 </body>
 </html>
